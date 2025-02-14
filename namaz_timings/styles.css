@@ -1,0 +1,66 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #f7f7f7;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  text-align: center;
+  padding: 25px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 20px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.5);
+}
+
+.app-title {
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-family: 'Amiri', serif;
+}
+
+.location {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.prayer-times {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.prayer-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.3s;
+}
+
+.prayer-card:hover {
+  transform: scale(1.05);
+}
+
+.prayer-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.prayer-time {
+  font-size: 20px;
+}
+
+.hijri-date {
+  margin-top: 20px;
+  font-size: 18px;
+  font-style: italic;
+  color: #f1c40f;
+}

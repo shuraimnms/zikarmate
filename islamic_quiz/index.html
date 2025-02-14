@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Islamic Quiz</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="quiz-container">
+    <h2 id="quiz-question"></h2>
+    <div id="quiz-options"></div>
+    <p id="quiz-feedback" style="display: none;"></p>
+    <button id="next-question" style="display: none;">Next Question</button>
+    <button id="restart-quiz" style="display: none;">Restart Quiz</button>
+  </div>
+
+  <!-- History Button at Bottom -->
+  <div id="history-section">
+    <button id="view-history">📜 View Quiz History</button>
+  </div>
+
+  <div id="history-container" style="display: none;">
+    <h2>Quiz History</h2>
+    <ul id="history-list"></ul>
+    <button onclick="hideHistory()">Close History</button>
+  </div>
+
+  <div id="result-container" style="display: none;">
+    <h2>Your Score</h2>
+    <p id="final-score"></p>
+    <h3>Correct Answers:</h3>
+    <ul id="correct-answers-list"></ul>
+    <button onclick="restartQuiz()">Restart Quiz</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

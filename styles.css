@@ -1005,107 +1005,37 @@ body {
 }
 
 
-
-/*quize*/
-/* Quiz container styles */
-#quiz-container {
-  background-color: #04031a;
-  border-radius: 10px;
-  border: 2px solid #ddd;
-  padding: 15px; /* Reduced padding for smaller size */
-  width: 100%;
-  max-width: 350px; /* Reduced max-width for a smaller container */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  /* Added margin to prevent container touching screen edges */
-  margin: 0 auto;
+/*quiz*/
+.bg-quiz-section {
+  background: linear-gradient(145deg, #f0f0f0, #d9d9d9);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px;
+  box-shadow: 5px 5px 15px #bebebe, -5px -5px 15px #ffffff;
+  transition: all 0.3s ease-in-out;
 }
 
-.h2 {
-  margin-bottom: 20px;
-  color: #0ac495bd; /* Teal green for heading */
+.bg-quiz-section:hover {
+  transform: scale(1.03);
+  box-shadow: 10px 10px 20px #bebebe, -10px -10px 20px #ffffff;
 }
 
-#quiz-options {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
-  justify-content: center;
-  font-size: 18px;
+.folder-title {
+  color: #333;
 }
 
-/* Buttons (Options) */
-.quiz-option {
-  padding: 13px;
-  font-size: 15px;
-  font-weight: bold;
-  background-color: #4caf65; /* Green for normal state */
-  color: rgb(0, 0, 0); /* Black text */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+.folder-description {
+  font-size: 16px;
 }
 
-.quiz-option:hover {
-  background-color: #45a049; /* Darker green when hovered */
+.btn {
+  transition: all 0.3s ease;
 }
 
-.quiz-option:active {
-  background-color: #388e3c; /* Even darker green when clicked */
+.btn:hover {
+  background: linear-gradient(145deg, #6d5dfc, #8e72f1);
+  transform: scale(1.05);
 }
-
-/* Style for the quiz question */
-#quiz-question {
-  color: #02e6ad; /* Teal green for question */
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-/* Feedback for Correct and Incorrect Answers */
-#quiz-feedback {
-  font-size: 18px;
-  margin-top: 15px;
-}
-
-.correct {
-  color: green; /* Green for correct answers */
-}
-
-.incorrect {
-  color: red; /* Red for incorrect answers */
-}
-
-/* Buttons for Next Question and Restart */
-#next-question, #restart-quiz {
-  padding: 10px 20px;
-  font-size: 18px;
-  background-color: #ff9800;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: 0.3s;
-}
-
-#next-question:hover, #restart-quiz:hover {
-  background-color: #e68900;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-}
-
-.quiz-option.incorrect:hover {
-  box-shadow: 0px 0px 10px 3px red; /* Red border for incorrect answers on hover */
-}
-
-.quiz-option.correct:hover {
-  box-shadow: 0px 0px 10px 3px green; /* Green border for correct answers on hover */
-}
-
 
 
 /* Main container for the Islamic Gallery section */
@@ -1434,4 +1364,21 @@ body {
 
 #ruqya .icon-container {
   color: #0288d1; /* Blue icon */
+}
+
+/*namaz time*/
+.namaz-timings {
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #28a745, #17a2b8);
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.namaz-timings:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
 }

@@ -130,32 +130,35 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     </div>
   </div>
-
-  <!-- Greeting Message -->
-<section class="p-4 text-center bg-gradient-to-r from-green-400 to-blue-500 text-white">
-  <div class="text-2xl font-semibold font-bold">
-    <h4>Assalamu Alaikum </h4> 
-    <h4>السلام علیکم! Start your day with Bismillah<h4>
-  </h1>
-</section>
-</p>
-</div>
-
-
-
-
-<!-- Islamic Quiz Section -->
+  
+  <!--namaz-->
+  <!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Islamic Quiz</title>
-  <div id="quiz-container">
-    <h2 id="quiz-question"></h2>
-    <div id="quiz-options"></div>
-    <p id="quiz-feedback" style="display: none;"></p>
-    <button id="next-question" style="display: none;">Next Question</button>
-    <button id="restart-quiz" style="display: none;">Restart Quiz</button>
-</div>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Namaz Timings</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="namaz-timings bg-gradient-to-r from-green-500 to-blue-600 text-white p-4 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition duration-300"
+       onclick="window.location.href='namaz_timings/index.html'">
+    <h2 class="text-xl font-semibold">Click here to View Namaz Timings</h2>
+    <p id="location" class="text-sm opacity-80">Fetching location...</p>
+    <p id="hijri-date" class="text-xs mt-1 opacity-70">Hijri Date</p>
+    <p id="current-prayer" class="text-lg font-bold mt-2">Current Prayer</p>
+    <p id="next-prayer" class="text-sm opacity-90 mt-1">Next Prayer</p>
+  </div>
+
+  <!-- Link to JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>
+  
+
+
+
+
 
 <!-- Link to app.js -->
 <script src="app.js"></script>
@@ -456,23 +459,23 @@ document.addEventListener("DOMContentLoaded", updateAzkarCard);
   </section>
   
     
-   <!-- AI Dua Giver Finder -->
-  <div class="folder bg-ai-dua" onclick="window.location.href='dua-generator-chatbot/frontend/index.html'">
-    <div class="flex items-center">
-      <i class="fas fa-robot text-gray-500 text-2xl"></i>
-      <h2 class="ml-2 folder-title">
-        AI Dua Finder
-      </h2>
-    </div>
-    <p class="mt-2 folder-description">
-      Get personalized duas from our AI assistant
-    </p>
-    <a href="dua-generator-chatbot/frontend/index.html">
-      <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded font-bold">
-        Try Now
-      </button>
-    </a>
+  <!-- Quiz Section -->
+<div class="folder bg-quiz-section" onclick="window.location.href='islamic_quiz/index.html'">
+  <div class="flex items-center">
+    <i class="fas fa-question-circle text-indigo-600 text-3xl"></i>
+    <h2 class="ml-3 folder-title font-semibold text-xl">
+      Islamic Quiz Zone
+    </h2>
   </div>
+  <p class="mt-3 folder-description text-gray-700">
+    Test your Islamic knowledge with our daily quiz!
+  </p>
+  <a href="islamic_quiz/index.html">
+    <button class="mt-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-indigo-600 hover:to-purple-600 text-white px-5 py-2 rounded-full shadow-lg font-bold transition-transform transform hover:scale-105">
+      Start Quiz
+    </button>
+  </a>
+</div>
 <!-- Quick Access Side Scroll (Horizontal Scroll) -->
 <section class="quick-access-row">
   <div class="quick-access-container">
