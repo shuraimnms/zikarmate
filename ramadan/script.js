@@ -7,7 +7,7 @@ function initializeApp() {
     createRozaTracker();
     updateRozaProgress();
     applySavedPreferences();
-    getLocationAndFetchTimings();
+    getUserLocation(); // Get user location & calculate timings
 }
 
 function setupEventListeners() {
@@ -49,7 +49,8 @@ function calculateZakat() {
     document.getElementById("zakat-result").textContent = `Your Zakat: $${zakat.toFixed(2)}`;
 }
 
-function getLocationAndFetchTimings() {
+// 🌍 Get User's Location & Fetch Timings using Karachi University's Method
+function getUserLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(fetchPrayerTimes, showError);
     } else {
@@ -57,19 +58,49 @@ function getLocationAndFetchTimings() {
     }
 }
 
+// 📌 Fetch Suhur & Iftar based on **user's location** using **Karachi University of Islamic Science's calculation method**
 function fetchPrayerTimes(position) {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
-    const apiURL = `https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=2`;
+    const apiURL = `https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=1`; // Karachi Uni Method
 
     fetch(apiURL)
         .then(response => response.json())
         .then(data => {
             const timings = data.data.timings;
-            document.getElementById("suhur-time").textContent = timings.Fajr;
-            document.getElementById("iftar-time").textContent = timings.Maghrib;
+
+            // Convert Suhur (Fajr) and Iftar (Maghrib) to AM/PM format
+            const suhurTime = convertTo12HourFormat(timings.Fajr);
+            const iftarTime = convertTo12HourFormat(timings.Maghrib);
+
+            document.getElementById("suhur-time").textContent = `Suhur: ${suhurTime}`;
+            document.getElementById("iftar-time").textContent = `Iftar: ${iftarTime}`;
         })
         .catch(error => console.error("Error fetching prayer times:", error));
+
+    // 📍 Get and display the user's city name
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+        .then(response => response.json())
+        .then(data => {
+            const location = data.address.city || data.address.town || data.address.village || "Unknown Location";
+            document.getElementById("location").textContent = `📍 Location: ${location}`;
+        })
+        .catch(error => console.error("Error fetching location:", error));
+}
+
+// ⏰ Convert 24-hour format to 12-hour format (AM/PM)
+function convertTo12HourFormat(time) {
+    let [hours, minutes] = time.split(":");
+    hours = parseInt(hours);
+    let period = hours >= 12 ? "PM" : "AM";
+
+    if (hours > 12) {
+        hours -= 12;
+    } else if (hours === 0) {
+        hours = 12;
+    }
+
+    return `${hours}:${minutes} ${period}`;
 }
 
 function applySavedPreferences() {
@@ -121,6 +152,7 @@ function updateRozaProgress() {
     document.getElementById("total-fasts").innerText = `${completedFasts}/30`;
 }
 
+// ❌ Handle Geolocation Errors
 function showError(error) {
     switch (error.code) {
         case error.PERMISSION_DENIED:
