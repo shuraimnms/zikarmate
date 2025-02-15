@@ -34,84 +34,21 @@
         </div>
 
         <!-- Theme Toggle Button -->
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Hamburger Menu with Dropdown</title>
-            <link rel="stylesheet" href="styles.css">
-        </head>
-        <body>
         
-          <div class="dropdown">
-            <!-- Hamburger icon as button -->
-            <button class="toggle-btn" onclick="toggleDropdown()">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </button>
-        
-           <!-- Dropdown menu with options -->
-<div id="dropdownMenu" class="dropdown-content">
-  <a href="main.html">Home</a> <!-- Link to the main page -->
-  <a href="#" onclick="openYouTube(event)">YouTube</a> <!-- Opens YouTube in the app -->
-  <a href="#" onclick="openInstagram(event)">Instagram</a> <!-- Opens Instagram in the app -->
-  <a href="feedback/index.html">Feedback</a> <!-- Link to a feedback page -->
-  <a href="about/index.html">About & Developer Info</a> <!-- Link to an about page -->
-  <a href="main.html">Back</a> <!-- Link to the back page -->
-</div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  // Open Instagram function
-  function openInstagram(event) {
-      event.preventDefault();
-      
-      var appUrl = "instagram://user?username=zikr_mate"; // Opens Instagram app
-      var webUrl = "https://www.instagram.com/zikr_mate?igsh=MmczYnAyMWFqdjlx"; // Opens Instagram website
-
-      // Try opening the Instagram app
-      window.location.href = appUrl;
-
-      // If app is not installed, open the web version after a short delay
-      setTimeout(function () {
-          window.location.href = webUrl;
-      }, 1500);
-  }
-
-  // Open YouTube function
-  function openYouTube(event) {
-      event.preventDefault();
-      
-      var appUrl = "vnd.youtube://channel/UCU9A2KS9jONx77mKwU9rUCQ"; // Opens YouTube app
-      var webUrl = "https://www.youtube.com/@shuraim_ai?si=HzRzDYTa58oIfw6J"; // Opens YouTube website
-
-      // Try opening the YouTube app
-      window.location.href = appUrl;
-
-      // If app is not installed, open the web version after a short delay
-      setTimeout(function () {
-          window.location.href = webUrl;
-      }, 1500);
-  }
-
-  // Toggle close on outside click
-  document.addEventListener("click", function (event) {
-      var toggles = document.querySelectorAll(".toggle-menu"); // Replace with your toggle class or ID
-      
-      toggles.forEach(function (toggle) {
-          if (!toggle.contains(event.target) && toggle.classList.contains("active")) {
-              toggle.classList.remove("active"); // Hide the toggle
-          }
-      });
-  });
-
-  // Assign functions to respective buttons
-  document.getElementById("instagramBtn").addEventListener("click", openInstagram);
-  document.getElementById("youtubeBtn").addEventListener("click", openYouTube);
-});
-</script>
+            
+            <!-- Dropdown menu -->
+            <div class="dropdown">
+                <button class="toggle" onclick="toggleDropdown()">☰</button>
+                <div id="dropdownMenu" class="dropdown-content">
+                    <a href="main.html">Home</a>
+                    <a href="dua_dhikr/index.html">Duas Collection</a>
+                    <a href="islamic_books/quran_kareem/index.html">Quran Recitation</a>
+                    <a href="feedback/index.html">Feedback</a>
+                    <a href="about/index.html">About & Developer Info</a>
+                    <a href="main.html">Back</a>
+                </div>
+            </div>
+            
 
         
         

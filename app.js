@@ -4,11 +4,8 @@ document.addEventListener('DOMContentLoaded', async function () {
   const nextPrayer = document.getElementById('next-prayer');
   const hijriDateDisplay = document.getElementById('hijri-date');
 
-  let userCity = localStorage.getItem('userCity');
-  let locationPermission = localStorage.getItem('locationPermission');
-
   async function fetchLocation() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           async (position) => {
@@ -16,26 +13,37 @@ document.addEventListener('DOMContentLoaded', async function () {
             const lon = position.coords.longitude;
 
             try {
-              const locRes = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+              const locRes = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+              );
               if (locRes.ok) {
                 const locData = await locRes.json();
-                userCity = locData.address.city || locData.address.town || locData.address.state || 'Your Location';
+                const userCity =
+                  locData.address.city ||
+                  locData.address.town ||
+                  locData.address.state ||
+                  'Unknown Location';
+
                 localStorage.setItem('userCity', userCity);
+                localStorage.setItem('lat', lat);
+                localStorage.setItem('lon', lon);
                 localStorage.setItem('locationPermission', 'granted');
+
+                resolve({ lat, lon, userCity });
+              } else {
+                reject('Error fetching city name');
               }
             } catch (error) {
-              console.error('Error fetching city name:', error);
+              reject('Location API error');
             }
-            resolve(true);
           },
           () => {
             localStorage.setItem('locationPermission', 'denied');
-            resolve(false);
+            reject('Location access denied');
           }
         );
       } else {
-        localStorage.setItem('locationPermission', 'denied');
-        resolve(false);
+        reject('Geolocation not supported');
       }
     });
   }
@@ -48,24 +56,30 @@ document.addEventListener('DOMContentLoaded', async function () {
   }
 
   async function getPrayerTimings() {
-    if (!locationPermission) {
-      await fetchLocation();
-      locationPermission = localStorage.getItem('locationPermission');
-      userCity = localStorage.getItem('userCity');
-    }
+    let lat = localStorage.getItem('lat');
+    let lon = localStorage.getItem('lon');
+    let userCity = localStorage.getItem('userCity');
+    let locationPermission = localStorage.getItem('locationPermission');
 
-    if (locationPermission === 'denied') {
-      locationDisplay.textContent = 'Needs location permission';
-      return;
+    if (!lat || !lon || !userCity || locationPermission !== 'granted') {
+      try {
+        const locationData = await fetchLocation();
+        lat = locationData.lat;
+        lon = locationData.lon;
+        userCity = locationData.userCity;
+      } catch (error) {
+        locationDisplay.textContent = error;
+        return;
+      }
     }
 
     locationDisplay.textContent = userCity || 'Fetching location...';
 
-    const karachiLat = 24.9221;
-    const karachiLon = 67.1139;
-
     try {
-      const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${karachiLat}&longitude=${karachiLon}&method=2`);
+      const res = await fetch(
+        `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=1`
+      ); // **Method 1 = Karachi University Islamic Science**
+      
       if (!res.ok) throw new Error('Failed to fetch prayer timings');
 
       const data = await res.json();
@@ -78,27 +92,38 @@ document.addEventListener('DOMContentLoaded', async function () {
       const now = new Date();
       let next = null;
 
-      for (const prayer of prayers) {
-        const [hours, minutes] = timings[prayer].split(':');
+      for (let i = 0; i < prayers.length; i++) {
+        const prayer = prayers[i];
+        const [hours, minutes] = timings[prayer].split(':').map(Number);
         const prayerTime = new Date();
         prayerTime.setHours(hours, minutes, 0);
+
         if (prayerTime > now) {
           next = { prayer, time: formatTime(timings[prayer]) };
           break;
         }
       }
 
-      const currentIndex = (prayers.indexOf(next.prayer) - 1 + prayers.length) % prayers.length;
-      currentPrayer.textContent = `Now: ${prayers[currentIndex]}`;
-      nextPrayer.textContent = `Next: ${next.prayer} at ${next.time}`;
+      let currentPrayerName = next ? prayers[prayers.indexOf(next.prayer) - 1] : 'Isha';
+      let nextPrayerName = next ? next.prayer : 'Fajr';
+      let nextPrayerTime = next ? next.time : formatTime(timings['Fajr']);
+
+      if (currentPrayerName === 'Isha') {
+        nextPrayerName = 'Fajr';
+        nextPrayerTime = formatTime(timings['Fajr']);
+      }
+
+      currentPrayer.textContent = `Now: ${currentPrayerName}`;
+      nextPrayer.textContent = `Next: ${nextPrayerName} at ${nextPrayerTime}`;
     } catch (err) {
       console.error('Error fetching prayer timings:', err);
-      locationDisplay.textContent = 'Error fetching data';
+      locationDisplay.textContent = 'Error fetching prayer times';
     }
   }
 
   getPrayerTimings();
 });
+
 
 // Function to open the settings panel
 

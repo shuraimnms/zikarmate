@@ -1,8 +1,40 @@
 let availableQaris = [];
-let selectedQari = "";
+let selectedQari = "1"; // Default to Sudais
 let currentPlaying = null;
 let surahData = [];
 let currentIndex = -1;
+
+// 📂 Use IndexedDB for efficient storage
+let db;
+const DB_NAME = "QuranAudioDB";
+const STORE_NAME = "surahs";
+
+// Open IndexedDB
+function openDB() {
+    let request = indexedDB.open(DB_NAME, 1);
+    request.onupgradeneeded = function (event) {
+        let db = event.target.result;
+        db.createObjectStore(STORE_NAME, { keyPath: "id" });
+    };
+    request.onsuccess = function (event) {
+        db = event.target.result;
+        loadSurahs();
+    };
+    request.onerror = function () {
+        console.error("Error opening database");
+    };
+}
+
+// 📂 Check if Surah is downloaded
+function isSurahDownloaded(surahID, callback) {
+    let transaction = db.transaction([STORE_NAME], "readonly");
+    let store = transaction.objectStore(STORE_NAME);
+    let request = store.get(surahID);
+
+    request.onsuccess = function () {
+        callback(request.result ? true : false);
+    };
+}
 
 // 🔄 Load Available Qaris (Reciters)
 async function loadQaris() {
@@ -21,8 +53,8 @@ async function loadQaris() {
             qariSelector.appendChild(option);
         });
 
-        selectedQari = availableQaris[0].id;
-        loadSurahs();
+        qariSelector.value = "1"; // Set Sudais as default
+        selectedQari = "1";
     } catch (error) {
         console.error("Error loading Qaris:", error);
         alert("⚠ Error fetching Reciters.");
@@ -40,10 +72,17 @@ async function loadSurahs() {
         surahData = data.chapters;
 
         data.chapters.forEach((surah, index) => {
-            let listItem = document.createElement("li");
-            listItem.innerHTML = `<span>${surah.id}. ${surah.name_simple} (${surah.name_arabic})</span>`;
-            listItem.onclick = () => playSurah(index);
-            surahList.appendChild(listItem);
+            isSurahDownloaded(surah.id, (isDownloaded) => {
+                let listItem = document.createElement("li");
+                listItem.innerHTML = `
+                    <span>${surah.id}. ${surah.name_simple} (${surah.name_arabic})</span>
+                    <button class="small-btn" onclick="playSurah(${index})">▶ Play</button>
+                    <button class="small-btn" id="downloadBtn_${surah.id}" onclick="downloadSurah(${index})">
+                        ${isDownloaded ? "✅ Downloaded" : "⬇ Download"}
+                    </button>
+                `;
+                surahList.appendChild(listItem);
+            });
         });
     } catch (error) {
         console.error("Error loading Surahs:", error);
@@ -51,54 +90,66 @@ async function loadSurahs() {
     }
 }
 
-// 🔍 Search Surah
-function filterSurahs() {
-    let input = document.getElementById("searchInput").value.toLowerCase();
-    let listItems = document.getElementById("surahList").getElementsByTagName("li");
-
-    for (let i = 0; i < listItems.length; i++) {
-        let text = listItems[i].textContent.toLowerCase();
-        listItems[i].style.display = text.includes(input) ? "" : "none";
-    }
-}
-
-// 🎙️ Update Qari
-function updateQari() {
-    selectedQari = document.getElementById("qariSelector").value;
-}
-
-// 🎵 Play Surah Audio
+// 🎵 Play Surah Audio (Offline/Online)
 async function playSurah(index) {
     if (index < 0 || index >= surahData.length) return;
 
     currentIndex = index;
+    let surahID = surahData[index].id;
+    const audioPlayer = document.getElementById("audioPlayer");
+
+    let transaction = db.transaction([STORE_NAME], "readonly");
+    let store = transaction.objectStore(STORE_NAME);
+    let request = store.get(surahID);
+
+    request.onsuccess = function () {
+        if (request.result) {
+            // Play offline
+            document.getElementById("playingSurah").textContent = `🎵 Now Playing (Offline): ${surahData[index].name_simple}`;
+            audioPlayer.src = request.result.audio;
+            audioPlayer.play();
+        } else {
+            // Fetch online if not downloaded
+            const apiUrl = `https://api.quran.com/api/v4/chapter_recitations/${selectedQari}/${surahID}`;
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.audio_file && data.audio_file.audio_url) {
+                        document.getElementById("playingSurah").textContent = `🎵 Now Playing: ${surahData[index].name_simple}`;
+                        audioPlayer.src = data.audio_file.audio_url;
+                        audioPlayer.play();
+                    }
+                })
+                .catch(error => console.error("Error playing Surah audio:", error));
+        }
+    };
+}
+
+// ⬇ Download Surah (Save in IndexedDB)
+async function downloadSurah(index) {
     let surahID = surahData[index].id;
     const apiUrl = `https://api.quran.com/api/v4/chapter_recitations/${selectedQari}/${surahID}`;
 
     try {
         const response = await fetch(apiUrl);
         const data = await response.json();
-        const audioPlayer = document.getElementById("audioPlayer");
 
         if (data.audio_file && data.audio_file.audio_url) {
-            document.getElementById("playingSurah").textContent = `🎵 Now Playing: ${surahData[index].name_simple}`;
-            audioPlayer.src = data.audio_file.audio_url;
-            audioPlayer.play();
+            let transaction = db.transaction([STORE_NAME], "readwrite");
+            let store = transaction.objectStore(STORE_NAME);
+            store.put({ id: surahID, audio: data.audio_file.audio_url });
+
+            // Update button UI
+            document.getElementById(`downloadBtn_${surahID}`).textContent = "✅ Downloaded";
         }
     } catch (error) {
-        console.error("Error playing Surah audio:", error);
+        console.error("Error downloading Surah:", error);
+        alert("⚠ Error downloading audio.");
     }
 }
 
-// ⏮ Previous Surah
-function previousSurah() {
-    playSurah(currentIndex - 1);
-}
-
-// ⏭ Next Surah
-function nextSurah() {
-    playSurah(currentIndex + 1);
-}
-
-// 🔄 Load Qaris on Page Load
-window.onload = loadQaris;
+// 🔄 Load Qaris & Open Database on Page Load
+window.onload = function () {
+    openDB();
+    loadQaris();
+};
