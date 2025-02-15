@@ -1,58 +1,105 @@
-// namaz timings 
 document.addEventListener('DOMContentLoaded', async function () {
   const locationDisplay = document.getElementById('location');
   const currentPrayer = document.getElementById('current-prayer');
   const nextPrayer = document.getElementById('next-prayer');
   const hijriDateDisplay = document.getElementById('hijri-date');
 
-  try {
-    let lat, lon;
+  let userCity = localStorage.getItem('userCity');
+  let locationPermission = localStorage.getItem('locationPermission');
 
-    // Fetch location using IP
-    const locRes = await fetch('https://ipapi.co/json/');
-    if (locRes.ok) {
-      const locData = await locRes.json();
-      lat = locData.latitude;
-      lon = locData.longitude;
-      locationDisplay.textContent = `${locData.city}, ${locData.country_name}`;
-    } else {
-      // Fallback coordinates for Mecca
-      lat = 21.3891;
-      lon = 39.8579;
-      locationDisplay.textContent = 'Default: Mecca, Saudi Arabia';
-    }
+  async function fetchLocation() {
+    return new Promise((resolve) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
 
-    // Fetch prayer timings
-    const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=2`);
-    if (!res.ok) throw new Error('Failed to fetch prayer timings');
-    const data = await res.json();
-    const timings = data.data.timings;
-    const hijriDate = data.data.date.hijri;
-
-    hijriDateDisplay.textContent = `${hijriDate.day} ${hijriDate.month.en} ${hijriDate.year}`;
-
-    const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-    const now = new Date();
-    let next = null;
-
-    for (const prayer of prayers) {
-      const [hours, minutes] = timings[prayer].split(':');
-      const prayerTime = new Date();
-      prayerTime.setHours(hours, minutes, 0);
-      if (prayerTime > now) {
-        next = { prayer, time: timings[prayer] };
-        break;
+            try {
+              const locRes = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+              if (locRes.ok) {
+                const locData = await locRes.json();
+                userCity = locData.address.city || locData.address.town || locData.address.state || 'Your Location';
+                localStorage.setItem('userCity', userCity);
+                localStorage.setItem('locationPermission', 'granted');
+              }
+            } catch (error) {
+              console.error('Error fetching city name:', error);
+            }
+            resolve(true);
+          },
+          () => {
+            localStorage.setItem('locationPermission', 'denied');
+            resolve(false);
+          }
+        );
+      } else {
+        localStorage.setItem('locationPermission', 'denied');
+        resolve(false);
       }
+    });
+  }
+
+  function formatTime(time) {
+    let [hours, minutes] = time.split(':').map(Number);
+    let period = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    return `${hours}:${minutes.toString().padStart(2, '0')} ${period}`;
+  }
+
+  async function getPrayerTimings() {
+    if (!locationPermission) {
+      await fetchLocation();
+      locationPermission = localStorage.getItem('locationPermission');
+      userCity = localStorage.getItem('userCity');
     }
 
-    const currentIndex = (prayers.indexOf(next.prayer) - 1 + prayers.length) % prayers.length;
-    currentPrayer.textContent = `Now: ${prayers[currentIndex]}`;
-    nextPrayer.textContent = `Next: ${next.prayer} at ${next.time}`;
-  } catch (err) {
-    locationDisplay.textContent = 'Error fetching data';
-    console.error('Error:', err);
+    if (locationPermission === 'denied') {
+      locationDisplay.textContent = 'Needs location permission';
+      return;
+    }
+
+    locationDisplay.textContent = userCity || 'Fetching location...';
+
+    const karachiLat = 24.9221;
+    const karachiLon = 67.1139;
+
+    try {
+      const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${karachiLat}&longitude=${karachiLon}&method=2`);
+      if (!res.ok) throw new Error('Failed to fetch prayer timings');
+
+      const data = await res.json();
+      const timings = data.data.timings;
+      const hijriDate = data.data.date.hijri;
+
+      hijriDateDisplay.textContent = `${hijriDate.day} ${hijriDate.month.en} ${hijriDate.year}`;
+
+      const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+      const now = new Date();
+      let next = null;
+
+      for (const prayer of prayers) {
+        const [hours, minutes] = timings[prayer].split(':');
+        const prayerTime = new Date();
+        prayerTime.setHours(hours, minutes, 0);
+        if (prayerTime > now) {
+          next = { prayer, time: formatTime(timings[prayer]) };
+          break;
+        }
+      }
+
+      const currentIndex = (prayers.indexOf(next.prayer) - 1 + prayers.length) % prayers.length;
+      currentPrayer.textContent = `Now: ${prayers[currentIndex]}`;
+      nextPrayer.textContent = `Next: ${next.prayer} at ${next.time}`;
+    } catch (err) {
+      console.error('Error fetching prayer timings:', err);
+      locationDisplay.textContent = 'Error fetching data';
+    }
   }
+
+  getPrayerTimings();
 });
+
 // Function to open the settings panel
 
 function openSettings() {

@@ -1,0 +1,142 @@
+/* 🌙 Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&family=Poppins:wght@300;700&display=swap');
+
+:root {
+    --bg-dark: #0a0a0a;
+    --card-bg: #1e1e1e; /* Darkened background */
+    --text-light: #000000;
+    --highlight: #ffcc00;
+    --border-glow: rgba(255, 204, 0, 0.8);
+    --btn-glow: rgba(255, 255, 255, 0.3);
+    --playing-bg: rgba(50, 255, 50, 0.8); /* Green glow for playing */
+}
+
+/* 🌌 Body Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #000000, #1a1a1a);
+    color: var(--text-light);
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* 🕌 Main Header */
+h1 {
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--highlight);
+    text-shadow: 2px 2px 5px var(--border-glow);
+    margin: 20px 0;
+}
+
+/* 📅 Hijri Date */
+#hijri-date {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #e6e6e6;
+    background: var(--card-bg);
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px var(--border-glow);
+}
+
+/* 🕋 Prayer Cards */
+#prayer-times {
+    display: flex;
+    color: #000;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.prayer-card {
+    padding: 15px;
+    margin: 8px;
+    border-radius: 10px;
+    background-color: #00eeff;/* Dark background */
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
+    color: var(--text-light); /* Ensures white text */
+    font-size: 1.4rem;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 204, 0, 0.4);
+}
+
+/* Highlight the current playing prayer */
+.prayer-card.playing {
+    background: var(--playing-bg);
+    box-shadow: 0 0 20px var(--playing-bg);
+    color: black; /* Ensures visibility */
+}
+
+/* 🌀 3D Hover Effect */
+.prayer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(255, 204, 0, 0.7);
+}
+
+/* 🔘 Buttons */
+button {
+    background: var(--btn-glow);
+    border: none;
+    padding: 10px 18px;
+    margin: 8px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgb(3, 127, 165);
+    cursor: pointer;
+    transition: 0.3s ease;
+    text-shadow: 1px 1px 3px black;
+}
+
+button:hover {
+    background: rgba(255, 204, 0, 0.6);
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.9);
+}
+
+/* 🔇 Mute Button */
+button[id^="mute-"] {
+    background: rgba(255, 50, 50, 0.7);
+}
+
+button[id^="mute-"]:hover {
+    background: rgba(255, 50, 50, 0.9);
+}
+
+/* 🌅 Extra Times (Sunrise, Sunset, Tahajjud) */
+#extra-times {
+    font-size: 1.2rem;
+    background:#00eeff;
+    padding: 12px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    display: inline-block;
+    box-shadow: 0 5px 15px var(--border-glow);
+    margin-top: 15px;
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 768px) {
+    .prayer-card {
+        width: 90%;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    #hijri-date {
+        font-size: 1.1rem;
+    }
+
+    #extra-times {
+        font-size: 1rem;
+    }
+}
