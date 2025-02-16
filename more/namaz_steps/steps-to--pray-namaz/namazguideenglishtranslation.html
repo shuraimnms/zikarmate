@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How to Perform Ghusl for Ladies | خواتین کے لیے غسل کا طریقہ</title>
+    <title>Step-by-Step Namaz | نماز کی مکمل رہنمائی</title>
     <link rel="stylesheet" href="style.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap');
-        
+
         body {
             font-family: 'Raleway', sans-serif;
             background: #111;
@@ -93,14 +93,6 @@
             font-weight: bold;
         }
 
-        .light-mode .toggle-btn {
-            background: linear-gradient(90deg, #ff9900, #ff3366);
-        }
-
-        .light-mode .dark-mode-btn {
-            background: linear-gradient(90deg, #00aaff, #00ffaa);
-        }
-
         ul {
             list-style: none;
             padding: 0;
@@ -117,7 +109,7 @@
 
         .light-mode li {
             background: rgba(168, 67, 67, 0.05);
-            color: #333;
+            color: #000;
             border-left: 4px solid #ff7733;
         }
 
@@ -132,7 +124,7 @@
 <body class="dark-mode">
 
     <header>
-        <h1>How to Perform Ghusl for Ladies | خواتین کے لیے غسل کا طریقہ</h1>
+        <h1>Step-by-Step Namaz | نماز کی مکمل رہنمائی</h1>
     </header>
 
     <button class="btn toggle-btn" id="langToggle" onclick="toggleLanguage()">Switch to Urdu</button>
@@ -140,26 +132,26 @@
 
     <div class="container">
         <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/your-video-url" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/tEVsZcal5WM" allowfullscreen></iframe>
         </div>
 
         <div class="description">
-            <h2 class="english">Steps to Perform Ghusl</h2>
-            <h2 class="urdu">غسل کے مراحل</h2>
+            <h2 class="english">Steps to Perform Namaz</h2>
+            <h2 class="urdu">نماز ادا کرنے کے مراحل</h2>
 
             <ul>
-                <li class="english"><strong>Step 1:</strong> Make intention (Niyyah) for Ghusl.</li>
-                <li class="urdu"><strong>مرحلہ 1:</strong> غسل کی نیت کریں۔</li>
-                <li class="english"><strong>Step 2:</strong> Wash both hands three times.</li>
-                <li class="urdu"><strong>مرحلہ 2:</strong> دونوں ہاتھ تین بار دھوئیں۔</li>
-                <li class="english"><strong>Step 3:</strong> Wash private parts thoroughly.</li>
-                <li class="urdu"><strong>مرحلہ 3:</strong> شرمگاہ کو اچھی طرح دھوئیں۔</li>
-                <li class="english"><strong>Step 4:</strong> Perform Wudu.</li>
-                <li class="urdu"><strong>مرحلہ 4:</strong> وضو کریں۔</li>
-                <li class="english"><strong>Step 5:</strong> Pour water over the whole body, starting with the right side.</li>
-                <li class="urdu"><strong>مرحلہ 5:</strong> پورے جسم پر پانی ڈالیں، دائیں طرف سے شروع کریں۔</li>
-                <li class="english"><strong>Step 6:</strong> Ensure water reaches all body parts, including hair and skin.</li>
-                <li class="urdu"><strong>مرحلہ 6:</strong> جسم کے تمام حصوں بشمول بالوں اور جلد پر پانی پہنچائیں۔</li>
+                <li class="english"><strong>Step 1:</strong> Make Wudu (Ablution).</li>
+                <li class="urdu"><strong>پہلا مرحلہ:</strong> وضو کریں۔</li>
+                <li class="english"><strong>Step 2:</strong> Stand facing Qibla and make intention (Niyyah).</li>
+                <li class="urdu"><strong>دوسرا مرحلہ:</strong> قبلہ رخ کھڑے ہو کر نیت کریں۔</li>
+                <li class="english"><strong>Step 3:</strong> Begin with Takbir (Allahu Akbar) and start recitation.</li>
+                <li class="urdu"><strong>تیسرا مرحلہ:</strong> تکبیر (اللہ اکبر) کے ساتھ آغاز کریں۔</li>
+                <li class="english"><strong>Step 4:</strong> Perform Ruku (Bowing).</li>
+                <li class="urdu"><strong>چوتھا مرحلہ:</strong> رکوع کریں۔</li>
+                <li class="english"><strong>Step 5:</strong> Perform Sujood (Prostration).</li>
+                <li class="urdu"><strong>پانچواں مرحلہ:</strong> سجدہ کریں۔</li>
+                <li class="english"><strong>Step 6:</strong> Complete Tashahhud and Salaam.</li>
+                <li class="urdu"><strong>چھٹا مرحلہ:</strong> تشہد اور سلام مکمل کریں۔</li>
             </ul>
         </div>
     </div>
@@ -167,11 +159,23 @@
     <script>
         function toggleLanguage() {
             let button = document.getElementById("langToggle");
-            document.querySelectorAll('.english').forEach(el => el.style.display = button.innerText.includes('Urdu') ? "none" : "block");
-            document.querySelectorAll('.urdu').forEach(el => el.style.display = button.innerText.includes('Urdu') ? "block" : "none");
-            button.innerText = button.innerText.includes('Urdu') ? "Switch to English" : "Switch to Urdu";
+            let englishTexts = document.querySelectorAll('.english');
+            let urduTexts = document.querySelectorAll('.urdu');
+
+            if (englishTexts[0].style.display === "none") {
+                englishTexts.forEach(el => el.style.display = "block");
+                urduTexts.forEach(el => el.style.display = "none");
+                button.innerText = "Switch to Urdu";
+            } else {
+                englishTexts.forEach(el => el.style.display = "none");
+                urduTexts.forEach(el => el.style.display = "block");
+                button.innerText = "Switch to English";
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('light-mode');
         }
     </script>
-
 </body>
 </html>

@@ -66,28 +66,43 @@ async function loadSurahs() {
     try {
         const response = await fetch("https://api.quran.com/api/v4/chapters");
         const data = await response.json();
-        const surahList = document.getElementById("surahList");
-
-        surahList.innerHTML = "";
         surahData = data.chapters;
-
-        data.chapters.forEach((surah, index) => {
-            isSurahDownloaded(surah.id, (isDownloaded) => {
-                let listItem = document.createElement("li");
-                listItem.innerHTML = `
-                    <span>${surah.id}. ${surah.name_simple} (${surah.name_arabic})</span>
-                    <button class="small-btn" onclick="playSurah(${index})">▶ Play</button>
-                    <button class="small-btn" id="downloadBtn_${surah.id}" onclick="downloadSurah(${index})">
-                        ${isDownloaded ? "✅ Downloaded" : "⬇ Download"}
-                    </button>
-                `;
-                surahList.appendChild(listItem);
-            });
-        });
+        displaySurahs(surahData); // Display all Surahs initially
     } catch (error) {
         console.error("Error loading Surahs:", error);
         alert("⚠ Error fetching Surahs.");
     }
+}
+
+// 🔎 Filter Surahs based on Search Query
+function filterSurahs() {
+    let query = document.getElementById("searchInput").value.toLowerCase();
+    let filteredSurahs = surahData.filter(surah =>
+        surah.name_simple.toLowerCase().includes(query) ||
+        surah.name_arabic.toLowerCase().includes(query) ||
+        surah.id.toString().includes(query)
+    );
+    displaySurahs(filteredSurahs);
+}
+
+// 📌 Display Surahs in the List
+function displaySurahs(surahListData) {
+    const surahList = document.getElementById("surahList");
+    surahList.innerHTML = "";
+
+    surahListData.forEach((surah, index) => {
+        isSurahDownloaded(surah.id, (isDownloaded) => {
+            let listItem = document.createElement("li");
+            listItem.innerHTML = `
+                <span>${surah.id}. ${surah.name_simple} (${surah.name_arabic})</span>
+                <button class="small-btn" onclick="playSurah(${index})">▶ Play</button>
+                <button class="small-btn" id="downloadBtn_${surah.id}" onclick="downloadSurah(${index})">
+                    ${isDownloaded ? "✅ Downloaded" : "⬇ Download"}
+                </button>
+            `;
+            surahList.appendChild(listItem);
+        });
+    });
 }
 
 // 🎵 Play Surah Audio (Offline/Online)

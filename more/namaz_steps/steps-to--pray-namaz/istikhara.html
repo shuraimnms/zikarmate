@@ -3,40 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How to Perform Istikhara استخارہ کیسے کریں</title>
+    <title>How to Perform Istikhara | استخارہ کیسے کریں</title>
     <link rel="stylesheet" href="style.css">
-    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap');
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: #111;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            transition: background 0.5s, color 0.5s;
+        }
+
+        body.light-mode {
+            background: #f7f1e3;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(90deg, #ff8c00, #ff0055);
+            padding: 15px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+
+        .light-mode header {
+            background: linear-gradient(90deg, #ffcc70, #ff6699);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(255, 165, 0, 0.5);
+        }
+
+        .light-mode .container {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: black;
+            border-radius: 10px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn {
+            background: linear-gradient(90deg, #ff00ff, #ffcc00);
+            color: white;
+            font-weight: bold;
+        }
+
+        .dark-mode-btn {
+            background: linear-gradient(90deg, #0077ff, #00ffcc);
+            color: white;
+            font-weight: bold;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            color: #00ffcc;
+        }
+
+        .urdu {
+            display: none;
+            direction: rtl;
+            font-family: 'Noto Nastaliq Urdu', serif;
+            color: #ffcc00;
+        }
+    </style>
 </head>
-<body>
+<body class="dark-mode">
 
-    <!-- Header Section -->
     <header>
-        <h1>How to Perform Istikhara استخارہ کیسے کریں</h1>
+        <h1>How to Perform Istikhara | استخارہ کیسے کریں</h1>
     </header>
-    
 
- <!-- Video Section -->
- <div class="video-container">
-    <!-- Embed Google Drive Video -->
-    <iframe src="https://drive.google.com/file/d/16CWWz6gNBEENdZ57-IBHy8tCBFE3hSCF/preview" width="800" height="450" allow="autoplay"></iframe>
-</div>
-    
+    <button class="btn toggle-btn" id="langToggle" onclick="toggleLanguage()">Switch to Urdu</button>
+    <button class="btn dark-mode-btn" id="darkModeToggle" onclick="toggleDarkMode()">Switch to Light Mode</button>
 
-    <!-- Description Section -->
-    <div class="description">
-        <h2>Steps to Perform Istikhara</h2>
-        <ul>
-            <li><strong>Step 1:</strong> Begin by making Niyyah (intention) for Istikhara prayer. Perform Wudu (ablution) if necessary.</li>
-            <li><strong>Step 2:</strong> Pray two Rak'ahs of voluntary prayer (Nafl prayer) after which you make Dua for guidance from Allah regarding your decision.</li>
-            <li><strong>Step 3:</strong> Recite the Istikhara dua after completing the two Rak'ahs. The dua is as follows: <br><code>اللهم إني استخيرك بعلمك واستقدرك بقدرتك، واسالك من فضلك العظيم</code></li>
-            <li><strong>Step 4:</strong> Trust Allah’s decision. After performing Istikhara, rely on Allah’s guidance and take action accordingly based on the feelings and circumstances that arise.</li>
-            <li><strong>Step 5:</strong> If you feel confused, do not worry. Istikhara will bring clarity, and you should look for signs that guide your decision.</li>
-            <li><strong>Step 6:</strong> Istikhara can be repeated multiple times if needed. Allah's guidance may come in the form of a feeling or a circumstance that helps you decide.</li>
-        </ul>
+    <div class="container">
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/pzQrgPr6VP4" allowfullscreen></iframe>
+        </div>
+
+        <div class="description">
+            <h2 class="english">Steps to Perform Istikhara</h2>
+            <h2 class="urdu">استخارہ کرنے کے مراحل</h2>
+
+            <ul class="english">
+                <li><strong>Step 1:</strong> Make Niyyah and perform Wudu.</li>
+                <li><strong>Step 2:</strong> Pray two Rak'ahs of Nafl prayer.</li>
+                <li><strong>Step 3:</strong> Recite the Istikhara dua.</li>
+                <li><strong>Step 4:</strong> Trust Allah and follow signs.</li>
+                <li><strong>Step 5:</strong> Repeat if needed.</li>
+            </ul>
+            
+            <ul class="urdu">
+                <li><strong>مرحلہ 1:</strong> نیت کریں اور وضو کریں۔</li>
+                <li><strong>مرحلہ 2:</strong> دو رکعت نفل نماز پڑھیں۔</li>
+                <li><strong>مرحلہ 3:</strong> استخارہ کی دعا پڑھیں۔</li>
+                <li><strong>مرحلہ 4:</strong> اللہ پر بھروسہ کریں اور اشاروں پر دھیان دیں۔</li>
+                <li><strong>مرحلہ 5:</strong> ضرورت ہو تو دوبارہ کریں۔</li>
+            </ul>
+        </div>
     </div>
 
     <script>
-        // Optional JavaScript for interactivity, such as toggling or other animations
+        function toggleLanguage() {
+            let button = document.getElementById("langToggle");
+            let englishTexts = document.querySelectorAll('.english');
+            let urduTexts = document.querySelectorAll('.urdu');
+
+            if (englishTexts[0].style.display === "none") {
+                englishTexts.forEach(el => el.style.display = "block");
+                urduTexts.forEach(el => el.style.display = "none");
+                button.innerText = "Switch to Urdu";
+            } else {
+                englishTexts.forEach(el => el.style.display = "none");
+                urduTexts.forEach(el => el.style.display = "block");
+                button.innerText = "Switch to English";
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('light-mode');
+            let button = document.getElementById("darkModeToggle");
+            button.innerText = document.body.classList.contains('light-mode') ? "Switch to Dark Mode" : "Switch to Light Mode";
+        }
     </script>
 
 </body>

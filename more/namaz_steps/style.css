@@ -1,93 +1,213 @@
-/* General Styling */
-body {
-  font-family: 'Arial', sans-serif;
+/* 🌟 Ultra-Premium Styling */
+* {
   margin: 0;
-  background: radial-gradient(circle, #0f0f0f, #1a1a1a);
-  color: white;
-  overflow-x: hidden;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* Header Styling */
+body {
+  background: #0a0a0a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* 📌 Sleek Floating Header */
 header {
-  text-align: center;
-  background: linear-gradient(90deg, #0d3b66, #0f172a);
-  padding: 4px 0; /* Smaller padding */
+  width: 100%;
+  padding: 8px 0;
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(12px);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 100;
+  text-align: center;
   font-size: 1.2rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4);
 }
-
-.header-container h1 {
+/* 🌟 Global Styles */
+* {
   margin: 0;
-  font-size: 1.9rem;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
-.header-container input {
-  width: 60%; /* Bigger search bar */
-  max-width: 400px;
-  padding: 12px 16px;
-  margin-top: 8px;
-  border-radius: 25px; /* Rounded */
-  border: 1px solid #444;
-  background: #222;
+body {
+  background: #0a0a0a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* 📌 Floating Header */
+header {
+  width: 100%;
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  text-align: center;
+  padding: 12px 0;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* 🔥 Header Container */
+.header-container {
+  max-width: 900px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+/* 📖 Islamic Guide Title */
+.header-container h1 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  background: linear-gradient(135deg, #00eaff, #00ffb3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0px 0px 15px rgba(0, 255, 255, 0.4);
+}
+
+/* 🔍 Futuristic Search Bar */
+#search {
+  width: 100%;
+  max-width: 350px;
+  padding: 14px 20px;
+  border-radius: 50px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.6);
   color: white;
   font-size: 1rem;
   outline: none;
-  box-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
-  transition: all 0.3s ease;
+  transition: 0.4s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0px 0px 10px rgba(0, 255, 255, 0.2);
 }
 
-.header-container input:focus {
+#search::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+/* ✨ Glowing Effect on Focus */
+#search:focus {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0px 0px 25px rgba(0, 255, 255, 0.6);
   transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(14, 165, 233, 0.8);
+  border-color: rgba(0, 255, 255, 0.8);
 }
 
-/* Folder Styling */
+/* 🔵 Glowing Border Animation */
+@keyframes neonGlow {
+  0% { box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.4); }
+  50% { box-shadow: 0px 0px 20px rgba(0, 255, 255, 0.8); }
+  100% { box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.4); }
+}
+
+#search:focus {
+  animation: neonGlow 1.5s infinite alternate;
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  #search {
+    max-width: 100%;
+    margin-top: 10px;
+  }
+}
+
+/* 🔵 Floating Animated Neon Effect */
+@keyframes neonGlow {
+  0% { box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.4); }
+  50% { box-shadow: 0px 0px 20px rgba(0, 255, 255, 0.8); }
+  100% { box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.4); }
+}
+
+.search-container input:focus {
+  animation: neonGlow 1.5s infinite alternate;
+}
+
+/* 📂 Glassmorphic Folders */
 .folder {
-  background: linear-gradient(145deg, #1a1a1a, #2c2c2c);
-  padding: 20px;
-  margin: 20px auto;
-  border: 1px solid #444;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 600px;
-  cursor: pointer;
-  transition: all 0.4s ease;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 25px;
+  margin: 30px 0;
+  border-radius: 15px;
+  width: 92%;
+  max-width: 750px;
   display: flex;
   align-items: center;
-  gap: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  gap: 20px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(15px);
+  box-shadow: 0px 8px 25px rgba(0, 190, 255, 0.2);
 }
 
 .folder:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(14, 165, 233, 0.6);
+  transform: translateY(-7px);
+  box-shadow: 0px 15px 40px rgba(0, 190, 255, 0.4);
 }
 
-.folder h2 {
-  color: #0ea5e9;
-  font-size: 1.5rem;
-  margin: 0;
-}
-
+/* 📂 Folder Icon */
 .folder .icon {
-  font-size: 2rem;
-  color: #0ea5e9;
+  font-size: 3rem;
+  color: #00c2ff;
 }
 
-/* Responsive Design */
+/* 📝 Folder Title */
+.folder h2 {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+/* 🌊 Premium Interactive Button */
+.button {
+  background: linear-gradient(135deg, #0077ff, #00d4ff);
+  color: white;
+  padding: 16px 42px;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 25px;
+  transition: 0.3s ease-in-out;
+  box-shadow: 0px 8px 25px rgba(0, 190, 255, 0.6);
+}
+
+.button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 12px 35px rgba(0, 190, 255, 0.8);
+}
+
+/* 📱 Fully Responsive */
 @media (max-width: 768px) {
-  .folder h2 {
-      font-size: 1.2rem;
+  .folder {
+    width: 95%;
   }
 
-  .folder .icon {
-      font-size: 1.5rem;
-  }
-
-  .header-container input {
-      width: 80%; /* Adjusted for smaller screens */
+  .search-container input {
+    font-size: 1.1rem;
   }
 }

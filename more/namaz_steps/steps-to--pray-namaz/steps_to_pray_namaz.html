@@ -3,42 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namaz Steps نماز کے مراحل</title>
+    <title>How to Perform Namaz | نماز کیسے پڑھیں</title>
     <link rel="stylesheet" href="style.css">
-  
-</head>
-<body>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap');
 
-    <!-- Header Section -->
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: #111;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            transition: background 0.5s, color 0.5s;
+        }
+
+        body.light-mode {
+            background: #f7f1e3;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(90deg, #ff8c00, #ff0055);
+            padding: 15px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+
+        .light-mode header {
+            background: linear-gradient(90deg, #ffcc70, #ff6699);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(255, 165, 0, 0.5);
+        }
+
+        .light-mode .container {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: black;
+            border-radius: 10px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn {
+            background: linear-gradient(90deg, #ff00ff, #ffcc00);
+            color: white;
+            font-weight: bold;
+        }
+
+        .dark-mode-btn {
+            background: linear-gradient(90deg, #0077ff, #00ffcc);
+            color: white;
+            font-weight: bold;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            color: #00ffcc;
+        }
+
+        .light-mode li {
+            background: rgba(168, 67, 67, 0.05);
+            color: #000;
+            border-left: 4px solid #ff7733;
+        }
+
+        .urdu {
+            display: none;
+            direction: rtl;
+            font-family: 'Noto Nastaliq Urdu', serif;
+            color: #ffcc00;
+        }
+    </style>
+</head>
+<body class="dark-mode">
+
     <header>
-        <h1>Namaz Steps نماز کے مراحل</h1>
+        <h1>How to Perform Namaz | نماز کیسے پڑھیں</h1>
     </header>
 
-  <!-- Video Section -->
-  <div class="video-container">
-    <!-- Embed Google Drive Video -->
-    <iframe src="https://drive.google.com/file/d/1MBRopYxf0YsIJmL0QkwJAp1av1y3E1To/preview" width="800" height="450" allow="autoplay"></iframe>
-</div>
+    <button class="btn toggle-btn" id="langToggle" onclick="toggleLanguage()">Switch to Urdu</button>
+    <button class="btn dark-mode-btn" id="darkModeToggle" onclick="toggleDarkMode()">Switch to Light Mode</button>
 
-    <!-- Description Section -->
-    <div class="description">
-        <h2>Steps to Perform Namaz</h2>
-        <ul>
-            <li><strong>Step 1:</strong> Begin by making Niyyah (intention) for the prayer.</li>
-            <li><strong>Step 2:</strong> Stand in Qiyam (standing position) and recite the opening Takbeer (Allahu Akbar).</li>
-            <li><strong>Step 3:</strong> Recite Surah Al-Fatiha followed by another Surah of your choice.</li>
-            <li><strong>Step 4:</strong> Perform Ruku (bowing) and say Subhana Rabbiyal Azeem.</li>
-            <li><strong>Step 5:</strong> Stand again in the upright position and say Sami Allahu liman hamidah.</li>
-            <li><strong>Step 6:</strong> Perform Sujud (prostration) and say Subhana Rabbiyal A'la.</li>
-            <li><strong>Step 7:</strong> Sit in between the two Sujuds and say Rabbighfir li.</li>
-            <li><strong>Step 8:</strong> Complete the prayer with the Tashahhud (testification of faith) and Tasleem (salutation).</li>
-        </ul>
+    <div class="container">
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/4QefdmhJ1Ys?si=eL4FdqHCnCd8itDG" allowfullscreen></iframe>
+        </div>
+        
+        <div class="description">
+            <h2 class="english">Steps to Perform Namaz</h2>
+            <h2 class="urdu">نماز ادا کرنے کے مراحل</h2>
+
+            <ul>
+                <li class="english"><strong>Step 1:</strong> Make Wudu (Ablution).</li>
+                <li class="urdu"><strong>پہلا مرحلہ:</strong> وضو کریں۔</li>
+                <li class="english"><strong>Step 2:</strong> Stand facing Qibla and make intention (Niyyah).</li>
+                <li class="urdu"><strong>دوسرا مرحلہ:</strong> قبلہ رخ کھڑے ہو کر نیت کریں۔</li>
+                <li class="english"><strong>Step 3:</strong> Begin with Takbir (Allahu Akbar) and start recitation.</li>
+                <li class="urdu"><strong>تیسرا مرحلہ:</strong> تکبیر (اللہ اکبر) کے ساتھ آغاز کریں۔</li>
+                <li class="english"><strong>Step 4:</strong> Perform Ruku (Bowing).</li>
+                <li class="urdu"><strong>چوتھا مرحلہ:</strong> رکوع کریں۔</li>
+                <li class="english"><strong>Step 5:</strong> Perform Sujood (Prostration).</li>
+                <li class="urdu"><strong>پانچواں مرحلہ:</strong> سجدہ کریں۔</li>
+                <li class="english"><strong>Step 6:</strong> Complete Tashahhud and Salaam.</li>
+                <li class="urdu"><strong>چھٹا مرحلہ:</strong> تشہد اور سلام مکمل کریں۔</li>
+            </ul>
+        </div>
     </div>
 
     <script>
-        // Optional JavaScript for any interactivity if needed in the future
-        // For example, you could add more animations or toggle effects for the description sections
-    </script>
+        function toggleLanguage() {
+            let button = document.getElementById("langToggle");
+            let englishTexts = document.querySelectorAll('.english');
+            let urduTexts = document.querySelectorAll('.urdu');
 
+            if (englishTexts[0].style.display === "none") {
+                englishTexts.forEach(el => el.style.display = "block");
+                urduTexts.forEach(el => el.style.display = "none");
+                button.innerText = "Switch to Urdu";
+            } else {
+                englishTexts.forEach(el => el.style.display = "none");
+                urduTexts.forEach(el => el.style.display = "block");
+                button.innerText = "Switch to English";
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('light-mode');
+            let button = document.getElementById("darkModeToggle");
+            button.innerText = document.body.classList.contains('light-mode') ? "Switch to Dark Mode" : "Switch to Light Mode";
+        }
+    </script>
 </body>
 </html>
