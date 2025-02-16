@@ -3,43 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Islamic Location Services | ZikrMate</title>
+    <title>🕌 Masjid Finder</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
     <div class="container">
-        <header>
-            <h1>📍 Islamic Location Services</h1>
-            <button id="themeToggle"><i class="fas fa-moon"></i></button>
-        </header>
+        <h1>🕌 Super Masjid Finder</h1>
+        <p>Find the nearest Masjid easily!</p>
 
-        <div class="location-services">
-            <div class="service-card" onclick="findNearbyMasjid()">
-                <i class="fas fa-mosque"></i>
-                <h2>Find Masjid</h2>
-                <p>Locate nearby mosques with ease.</p>
-            </div>
+        <button class="find-btn" onclick="findNearbyMasjid()">
+            <i class="fas fa-mosque"></i> Find Masjid
+        </button>
 
-            <div class="service-card" onclick="findIslamicEvents()">
-                <i class="fas fa-calendar-alt"></i>
-                <h2>Islamic Events</h2>
-                <p>Discover upcoming Islamic events.</p>
-            </div>
-
-            <div class="service-card" onclick="findQibla()">
-                <i class="fas fa-compass"></i>
-                <h2>Qibla Direction</h2>
-                <p>Find the direction of the Qibla accurately.</p>
-            </div>
-        </div>
-
-        <footer>
-            <p>Powered by <span>ZikrMate</span></p>
-        </footer>
+        <button id="themeToggle">
+            <i class="fas fa-moon"></i> Toggle Dark Mode
+        </button>
     </div>
 
+    <script src="script.js"></script>
 </body>
 </html>

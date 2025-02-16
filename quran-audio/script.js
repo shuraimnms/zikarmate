@@ -25,11 +25,11 @@ function openDB() {
     };
 }
 
-// 📂 Check if Surah is downloaded
-function isSurahDownloaded(surahID, callback) {
+// 📂 Check if Surah is downloaded for the selected Qari
+function isSurahDownloaded(surahID, qariID, callback) {
     let transaction = db.transaction([STORE_NAME], "readonly");
     let store = transaction.objectStore(STORE_NAME);
-    let request = store.get(surahID);
+    let request = store.get(`${surahID}_${qariID}`);
 
     request.onsuccess = function () {
         callback(request.result ? true : false);
@@ -55,6 +55,10 @@ async function loadQaris() {
 
         qariSelector.value = "1"; // Set Sudais as default
         selectedQari = "1";
+        qariSelector.addEventListener("change", () => {
+            selectedQari = qariSelector.value;
+            loadSurahs(); // Reload the download status
+        });
     } catch (error) {
         console.error("Error loading Qaris:", error);
         alert("⚠ Error fetching Reciters.");
@@ -67,7 +71,7 @@ async function loadSurahs() {
         const response = await fetch("https://api.quran.com/api/v4/chapters");
         const data = await response.json();
         surahData = data.chapters;
-        displaySurahs(surahData); // Display all Surahs initially
+        displaySurahs(surahData);
     } catch (error) {
         console.error("Error loading Surahs:", error);
         alert("⚠ Error fetching Surahs.");
@@ -91,7 +95,7 @@ function displaySurahs(surahListData) {
     surahList.innerHTML = "";
 
     surahListData.forEach((surah, index) => {
-        isSurahDownloaded(surah.id, (isDownloaded) => {
+        isSurahDownloaded(surah.id, selectedQari, (isDownloaded) => {
             let listItem = document.createElement("li");
             listItem.innerHTML = `
                 <span>${surah.id}. ${surah.name_simple} (${surah.name_arabic})</span>
@@ -115,7 +119,7 @@ async function playSurah(index) {
 
     let transaction = db.transaction([STORE_NAME], "readonly");
     let store = transaction.objectStore(STORE_NAME);
-    let request = store.get(surahID);
+    let request = store.get(`${surahID}_${selectedQari}`);
 
     request.onsuccess = function () {
         if (request.result) {
@@ -140,7 +144,7 @@ async function playSurah(index) {
     };
 }
 
-// ⬇ Download Surah (Save in IndexedDB)
+// ⬇ Download Surah (Save in IndexedDB for the selected Qari)
 async function downloadSurah(index) {
     let surahID = surahData[index].id;
     const apiUrl = `https://api.quran.com/api/v4/chapter_recitations/${selectedQari}/${surahID}`;
@@ -152,10 +156,13 @@ async function downloadSurah(index) {
         if (data.audio_file && data.audio_file.audio_url) {
             let transaction = db.transaction([STORE_NAME], "readwrite");
             let store = transaction.objectStore(STORE_NAME);
-            store.put({ id: surahID, audio: data.audio_file.audio_url });
+            store.put({ id: `${surahID}_${selectedQari}`, audio: data.audio_file.audio_url });
 
             // Update button UI
             document.getElementById(`downloadBtn_${surahID}`).textContent = "✅ Downloaded";
+
+            // Play the downloaded surah immediately
+            playSurah(index);
         }
     } catch (error) {
         console.error("Error downloading Surah:", error);

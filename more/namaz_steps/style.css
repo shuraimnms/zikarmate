@@ -31,36 +31,6 @@ header {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4);
 }
-/* 🌟 Global Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
-body {
-  background: #0a0a0a;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
-}
-
-/* 📌 Floating Header */
-header {
-  width: 100%;
-  background: rgba(20, 20, 20, 0.95);
-  backdrop-filter: blur(12px);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  text-align: center;
-  padding: 12px 0;
-  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4);
-}
 
 /* 🔥 Header Container */
 .header-container {
@@ -111,18 +81,62 @@ header {
   border-color: rgba(0, 255, 255, 0.8);
 }
 
-/* 🔵 Glowing Border Animation */
-@keyframes neonGlow {
-  0% { box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.4); }
-  50% { box-shadow: 0px 0px 20px rgba(0, 255, 255, 0.8); }
-  100% { box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.4); }
+/* 📂 Glassmorphic Folders (Decreased Size) */
+.folder {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 15px; /* Reduced padding */
+  margin: 20px 0; /* Adjusted margin */
+  border-radius: 12px; /* Slightly reduced border-radius */
+  width: 85%; /* Reduced width */
+  max-width: 650px; /* Smaller max width */
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Reduced gap */
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  box-shadow: 0px 5px 20px rgba(0, 190, 255, 0.2);
 }
 
-#search:focus {
-  animation: neonGlow 1.5s infinite alternate;
+.folder:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 10px 30px rgba(0, 190, 255, 0.4);
 }
 
-/* 📱 Responsive Design */
+/* 📂 Folder Icon */
+.folder .icon {
+  font-size: 2.5rem; /* Slightly reduced */
+  color: #00c2ff;
+}
+
+/* 📝 Folder Title */
+.folder h2 {
+  font-size: 1.4rem; /* Reduced text size */
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+/* 🌊 Premium Interactive Button */
+.button {
+  background: linear-gradient(135deg, #0077ff, #00d4ff);
+  color: white;
+  padding: 14px 35px; /* Slightly smaller */
+  border-radius: 40px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 20px;
+  transition: 0.3s ease-in-out;
+  box-shadow: 0px 5px 20px rgba(0, 190, 255, 0.6);
+}
+
+.button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 10px 30px rgba(0, 190, 255, 0.8);
+}
+
+/* 📱 Fully Responsive */
 @media (max-width: 768px) {
   .header-container {
     flex-direction: column;
@@ -133,81 +147,12 @@ header {
     max-width: 100%;
     margin-top: 10px;
   }
-}
 
-/* 🔵 Floating Animated Neon Effect */
-@keyframes neonGlow {
-  0% { box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.4); }
-  50% { box-shadow: 0px 0px 20px rgba(0, 255, 255, 0.8); }
-  100% { box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.4); }
-}
-
-.search-container input:focus {
-  animation: neonGlow 1.5s infinite alternate;
-}
-
-/* 📂 Glassmorphic Folders */
-.folder {
-  background: rgba(255, 255, 255, 0.08);
-  padding: 25px;
-  margin: 30px 0;
-  border-radius: 15px;
-  width: 92%;
-  max-width: 750px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(15px);
-  box-shadow: 0px 8px 25px rgba(0, 190, 255, 0.2);
-}
-
-.folder:hover {
-  transform: translateY(-7px);
-  box-shadow: 0px 15px 40px rgba(0, 190, 255, 0.4);
-}
-
-/* 📂 Folder Icon */
-.folder .icon {
-  font-size: 3rem;
-  color: #00c2ff;
-}
-
-/* 📝 Folder Title */
-.folder h2 {
-  font-size: 1.6rem;
-  font-weight: 500;
-  color: #e0e0e0;
-}
-
-/* 🌊 Premium Interactive Button */
-.button {
-  background: linear-gradient(135deg, #0077ff, #00d4ff);
-  color: white;
-  padding: 16px 42px;
-  border-radius: 50px;
-  font-size: 1.2rem;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-block;
-  margin-top: 25px;
-  transition: 0.3s ease-in-out;
-  box-shadow: 0px 8px 25px rgba(0, 190, 255, 0.6);
-}
-
-.button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 12px 35px rgba(0, 190, 255, 0.8);
-}
-
-/* 📱 Fully Responsive */
-@media (max-width: 768px) {
   .folder {
-    width: 95%;
+    width: 90%; /* Adjusted width for smaller screens */
   }
 
-  .search-container input {
-    font-size: 1.1rem;
+  .folder h2 {
+    font-size: 1.2rem; /* Smaller text size */
   }
 }
