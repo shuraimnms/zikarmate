@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   const currentPrayer = document.getElementById('current-prayer');
   const nextPrayer = document.getElementById('next-prayer');
   const hijriDateDisplay = document.getElementById('hijri-date');
+  const allPrayerTimings = document.getElementById('all-prayers'); // New element for displaying all prayer times
 
   async function fetchLocation() {
     return new Promise((resolve, reject) => {
@@ -88,12 +89,34 @@ document.addEventListener('DOMContentLoaded', async function () {
 
       hijriDateDisplay.textContent = `${hijriDate.day} ${hijriDate.month.en} ${hijriDate.year}`;
 
-      const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+      const prayers = [
+        'Fajr',
+        'Sunrise',
+        'Dhuhr',
+        'Asr',
+        'Maghrib',
+        'Isha',
+        'Tahajjud',
+        'Ishraq',
+        'Chasht'
+      ];
+
+      let prayerTimingsHTML = '<ul>';
+      prayers.forEach((prayer) => {
+        if (timings[prayer]) {
+          prayerTimingsHTML += `<li>${prayer}: ${formatTime(timings[prayer])}</li>`;
+        }
+      });
+      prayerTimingsHTML += '</ul>';
+      allPrayerTimings.innerHTML = prayerTimingsHTML;
+
       const now = new Date();
       let next = null;
 
       for (let i = 0; i < prayers.length; i++) {
         const prayer = prayers[i];
+        if (!timings[prayer]) continue;
+        
         const [hours, minutes] = timings[prayer].split(':').map(Number);
         const prayerTime = new Date();
         prayerTime.setHours(hours, minutes, 0);
@@ -123,7 +146,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   getPrayerTimings();
 });
-
 
 // Function to open the settings panel
 
