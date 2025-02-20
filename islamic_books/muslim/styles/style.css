@@ -70,6 +70,96 @@ h2 {
     border-color: #16a085;
     box-shadow: 0 0 15px rgba(22, 160, 133, 0.5);
 }
+/* Search Results Container */
+#search-results {
+    display: none; /* Initially hidden */
+    position: absolute;
+    width: 100%;
+    max-height: 350px;
+    overflow-y: auto;
+    background: #222; /* Dark mode look */
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    margin-top: 5px;
+    padding: 10px;
+    backdrop-filter: blur(8px);
+}
+
+/* Individual Search Result Item */
+.search-result-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: transform 0.3s ease, background 0.3s ease;
+    cursor: pointer;
+}
+
+/* Hover Effect */
+.search-result-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.03);
+}
+
+/* Hadith Arabic Text */
+.hadith-arabic {
+    font-size: 18px;
+    font-weight: bold;
+    color: #f1c40f; /* Golden highlight */
+    direction: rtl;
+    text-align: right;
+    margin-top: 5px;
+}
+
+/* Hadith English Text */
+.hadith-english {
+    font-size: 14px;
+    color: #ddd;
+    text-align: left;
+    font-style: italic;
+}
+
+/* Hadith Number */
+.search-result-item p strong {
+    color: #1abc9c; /* Teal color */
+}
+
+/* Glowing Effect */
+.search-result-item:hover {
+    box-shadow: 0px 0px 10px rgba(241, 196, 15, 0.5);
+}
+
+/* Scrollbar Customization */
+#search-results::-webkit-scrollbar {
+    width: 8px;
+}
+
+#search-results::-webkit-scrollbar-track {
+    background: #333;
+}
+
+#search-results::-webkit-scrollbar-thumb {
+    background: #f1c40f;
+    border-radius: 10px;
+}
+
+/* Smooth Appearance Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-result-item {
+    animation: fadeInUp 0.3s ease-in-out;
+}
+
 
 /* Chapters Container */
 #chapters-container {
@@ -188,3 +278,27 @@ li.chapter:hover {
         font-size: 1.4em;
     }
 }
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Apply animation to search results */
+li.chapter {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+/* Delay animation for each result */
+li.chapter:nth-child(1) { animation-delay: 0.1s; }
+li.chapter:nth-child(2) { animation-delay: 0.2s; }
+li.chapter:nth-child(3) { animation-delay: 0.3s; }
+li.chapter:nth-child(4) { animation-delay: 0.4s; }
+li.chapter:nth-child(5) { animation-delay: 0.5s; }

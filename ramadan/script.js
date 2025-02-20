@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     initializeApp();
+    setInterval(getUserLocation, 600000); // Refresh location every 10 minutes (600000ms)
 });
 
 function initializeApp() {
@@ -49,16 +50,20 @@ function calculateZakat() {
     document.getElementById("zakat-result").textContent = `Your Zakat: $${zakat.toFixed(2)}`;
 }
 
-// 🌍 Get User's Location & Fetch Timings using Karachi University's Method
+// 🌍 Get User's Location & Fetch Timings
 function getUserLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(fetchPrayerTimes, showError);
+        navigator.geolocation.getCurrentPosition(fetchPrayerTimes, showError, {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        });
     } else {
         alert("Geolocation is not supported by this browser.");
     }
 }
 
-// 📌 Fetch Suhur & Iftar based on **user's location** using **Karachi University of Islamic Science's calculation method**
+// 📌 Fetch Suhur & Iftar based on user's location
 function fetchPrayerTimes(position) {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
@@ -68,8 +73,6 @@ function fetchPrayerTimes(position) {
         .then(response => response.json())
         .then(data => {
             const timings = data.data.timings;
-
-            // Convert Suhur (Fajr) and Iftar (Maghrib) to AM/PM format
             const suhurTime = convertTo12HourFormat(timings.Fajr);
             const iftarTime = convertTo12HourFormat(timings.Maghrib);
 
@@ -78,7 +81,7 @@ function fetchPrayerTimes(position) {
         })
         .catch(error => console.error("Error fetching prayer times:", error));
 
-    // 📍 Get and display the user's city name
+    // 📍 Get and display the user's city/town name
     fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
         .then(response => response.json())
         .then(data => {

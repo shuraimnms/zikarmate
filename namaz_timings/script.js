@@ -1,37 +1,39 @@
 document.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem("locationAllowed") === "true") {
-      const storedLat = localStorage.getItem("latitude");
-      const storedLon = localStorage.getItem("longitude");
-
-      if (storedLat && storedLon) {
-          fetchPrayerTimes(storedLat, storedLon);
-      } else {
-          requestLocation();
-      }
-  } else {
-      requestLocation();
-  }
+  requestLocation();
 });
 
-// **Request Location Only If Not Stored**
+// **Request Location and Refresh Always**
 function requestLocation() {
-  navigator.geolocation.getCurrentPosition(success, error);
+  if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(success, error, { enableHighAccuracy: true });
+  } else {
+      document.getElementById('location').innerText = "⚠️ Geolocation is not supported by this browser.";
+  }
 }
 
 function success(position) {
   const lat = position.coords.latitude;
   const lon = position.coords.longitude;
 
-  localStorage.setItem("locationAllowed", "true");
-  localStorage.setItem("latitude", lat);
-  localStorage.setItem("longitude", lon);
-
+  fetchCityName(lat, lon);
   fetchPrayerTimes(lat, lon);
 }
 
 function error() {
   document.getElementById('location').innerText = "⚠️ Location access denied!";
-  localStorage.setItem("locationAllowed", "false");
+}
+
+// **Fetch City Name**
+function fetchCityName(lat, lon) {
+  fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+      .then(res => res.json())
+      .then(data => {
+          const city = data.address.city || data.address.town || data.address.village || "Unknown";
+          document.getElementById('location').innerText = `📍 Location: ${city}`;
+      })
+      .catch(() => {
+          document.getElementById('location').innerText = "📍 Location: Not found";
+      });
 }
 
 // **Fetch Prayer Times**
@@ -56,7 +58,7 @@ function formatTime(time) {
   return `${formattedHour}:${minute < 10 ? "0" : ""}${minute} ${ampm}`;
 }
 
-// **Show Prayer Times with Clickable Color Change**
+// **Show Prayer Times**
 function showPrayerTimes(timings) {
   const prayerContainer = document.getElementById('prayer-times');
   prayerContainer.innerHTML = "";
@@ -65,7 +67,7 @@ function showPrayerTimes(timings) {
   prayerOrder.forEach(prayer => {
       const card = document.createElement('div');
       card.className = 'prayer-card';
-      card.setAttribute("data-prayer", prayer); 
+      card.setAttribute("data-prayer", prayer);
 
       const muteStatus = localStorage.getItem(`mute_${prayer}`) === "true";
 
@@ -76,12 +78,6 @@ function showPrayerTimes(timings) {
           </button>
           <button onclick="listenAdhan('${prayer}')">🎵 Listen</button>
       `;
-
-      // **Click to Change Color**
-      card.addEventListener("click", () => {
-          document.querySelectorAll('.prayer-card').forEach(c => c.classList.remove('selected'));
-          card.classList.add('selected');
-      });
 
       prayerContainer.appendChild(card);
   });
@@ -160,8 +156,6 @@ function scheduleAdhanNotifications(timings) {
       adhanTime.setHours(hour, minute, 0, 0);
 
       if (adhanTime > now) {
-          console.log(`Adhan for ${prayer} scheduled at ${adhanTime}`);
-
           setTimeout(() => {
               if (Notification.permission === "granted") {
                   new Notification(`Time for ${prayer}!`, { 

@@ -1,6 +1,12 @@
+document.addEventListener("DOMContentLoaded", function () {
+    loadChapters(); // Load chapters initially
+});
+
 // Function to load chapters dynamically
 function loadChapters() {
     const chaptersContainer = document.getElementById("chapters");
+    chaptersContainer.innerHTML = '';
+
     sahihMuslimData.chapters.forEach(chapter => {
         const chapterElement = document.createElement("li");
         chapterElement.classList.add("chapter");
@@ -19,33 +25,43 @@ function loadChapters() {
     });
 }
 
-// Function to search through hadiths
+// Function to perform instant search with smooth appearance
 function searchHadith() {
-    const query = document.getElementById('search-bar').value.toLowerCase();
+    const query = document.getElementById('search-bar').value.trim().toLowerCase();
     const searchResultsContainer = document.getElementById('search-results');
-    searchResultsContainer.innerHTML = '';  // Clear previous results
+    searchResultsContainer.innerHTML = '';
 
-    const filteredHadiths = sahihMuslimData.hadiths.filter(hadith => {
-        return hadith.arabic.toLowerCase().includes(query) || hadith.english.text.toLowerCase().includes(query);
-    });
+    if (query === '') {
+        searchResultsContainer.style.display = 'none'; // Hide search results if empty
+        return;
+    }
+
+    searchResultsContainer.style.display = 'block'; // Show search results
+    const filteredHadiths = sahihMuslimData.hadiths.filter(hadith => 
+        hadith.arabic.toLowerCase().includes(query) || 
+        hadith.english.text.toLowerCase().includes(query)
+    );
 
     if (filteredHadiths.length === 0) {
-        searchResultsContainer.innerHTML = '<p>No results found</p>';
+        searchResultsContainer.innerHTML = '<p style="text-align: center; color: #f1c40f;">No results found</p>';
     } else {
-        filteredHadiths.forEach(hadith => {
-            const resultItem = document.createElement('div');
-            resultItem.classList.add('search-result-item');
-            resultItem.innerHTML = `
-                <p><strong>Hadith Number:</strong> ${hadith.number}</p>
-                <p><strong>Arabic:</strong> ${hadith.arabic}</p>
-                <p><strong>English:</strong> ${hadith.english.narrator}: ${hadith.english.text}</p>
-            `;
-            searchResultsContainer.appendChild(resultItem);
+        filteredHadiths.forEach((hadith, index) => {
+            setTimeout(() => {
+                const resultItem = document.createElement('div');
+                resultItem.classList.add('search-result-item');
+                resultItem.innerHTML = `
+                    <p><strong>Hadith Number:</strong> ${hadith.number}</p>
+                    <p class="hadith-arabic">${hadith.arabic}</p>
+                    <p class="hadith-english"><strong>${hadith.english.narrator}:</strong> ${hadith.english.text}</p>
+                `;
+                searchResultsContainer.appendChild(resultItem);
+            }, index * 100); // Staggered appearance effect
         });
     }
 }
 
-// Initialize the app
-document.addEventListener("DOMContentLoaded", function () {
-    loadChapters();
-});
+// Attach event listener for real-time search
+const searchBar = document.getElementById('search-bar');
+if (searchBar) {
+    searchBar.addEventListener('input', searchHadith);
+}

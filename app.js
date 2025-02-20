@@ -4,9 +4,16 @@ document.addEventListener('DOMContentLoaded', async function () {
   const nextPrayer = document.getElementById('next-prayer');
   const hijriDateDisplay = document.getElementById('hijri-date');
 
-  async function fetchLocation() {
+  async function fetchLocation(forceUpdate = false) {
     return new Promise((resolve, reject) => {
-      if (navigator.geolocation) {
+      if (!forceUpdate && localStorage.getItem('lat') && localStorage.getItem('lon')) {
+        // Use stored location if no force update
+        resolve({
+          lat: localStorage.getItem('lat'),
+          lon: localStorage.getItem('lon'),
+          userCity: localStorage.getItem('userCity') || 'Saved Location',
+        });
+      } else if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           async (position) => {
             const lat = position.coords.latitude;
@@ -16,20 +23,29 @@ document.addEventListener('DOMContentLoaded', async function () {
               const locRes = await fetch(
                 `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
               );
+
               if (locRes.ok) {
                 const locData = await locRes.json();
                 const userCity =
                   locData.address.city ||
                   locData.address.town ||
+                  locData.address.village ||
                   locData.address.state ||
                   'Unknown Location';
 
-                localStorage.setItem('userCity', userCity);
-                localStorage.setItem('lat', lat);
-                localStorage.setItem('lon', lon);
-                localStorage.setItem('locationPermission', 'granted');
+                // Compare with previous location
+                const lastLat = localStorage.getItem('lat');
+                const lastLon = localStorage.getItem('lon');
 
-                resolve({ lat, lon, userCity });
+                if (lat.toFixed(2) !== lastLat?.toFixed(2) || lon.toFixed(2) !== lastLon?.toFixed(2)) {
+                  console.log('Location changed! Updating...');
+                  localStorage.setItem('userCity', userCity);
+                  localStorage.setItem('lat', lat);
+                  localStorage.setItem('lon', lon);
+                  resolve({ lat, lon, userCity });
+                } else {
+                  resolve({ lat, lon, userCity });
+                }
               } else {
                 reject('Error fetching city name');
               }
@@ -37,8 +53,10 @@ document.addEventListener('DOMContentLoaded', async function () {
               reject('Location API error');
             }
           },
-          () => {
-            localStorage.setItem('locationPermission', 'denied');
+          (error) => {
+            if (error.code === error.PERMISSION_DENIED) {
+              alert('Location permission denied. Using last saved location.');
+            }
             reject('Location access denied');
           }
         );
@@ -55,22 +73,19 @@ document.addEventListener('DOMContentLoaded', async function () {
     return `${hours}:${minutes.toString().padStart(2, '0')} ${period}`;
   }
 
-  async function getPrayerTimings() {
-    let lat = localStorage.getItem('lat');
-    let lon = localStorage.getItem('lon');
-    let userCity = localStorage.getItem('userCity');
-    let locationPermission = localStorage.getItem('locationPermission');
+  async function getPrayerTimings(forceUpdate = false) {
+    let lat, lon, userCity;
 
-    if (!lat || !lon || !userCity || locationPermission !== 'granted') {
-      try {
-        const locationData = await fetchLocation();
-        lat = locationData.lat;
-        lon = locationData.lon;
-        userCity = locationData.userCity;
-      } catch (error) {
-        locationDisplay.textContent = error;
-        return;
-      }
+    try {
+      const locationData = await fetchLocation(forceUpdate);
+      lat = locationData.lat;
+      lon = locationData.lon;
+      userCity = locationData.userCity;
+    } catch (error) {
+      locationDisplay.textContent = 'Using saved location';
+      lat = localStorage.getItem('lat');
+      lon = localStorage.getItem('lon');
+      userCity = localStorage.getItem('userCity') || 'Unknown Location';
     }
 
     locationDisplay.textContent = userCity || 'Fetching location...';
@@ -78,8 +93,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     try {
       const res = await fetch(
         `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=1`
-      ); // **Method 1 = Karachi University Islamic Science**
-      
+      ); // **Method 1 = Karachi Univ Calculation**
+
       if (!res.ok) throw new Error('Failed to fetch prayer timings');
 
       const data = await res.json();
@@ -88,27 +103,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
       hijriDateDisplay.textContent = `${hijriDate.day} ${hijriDate.month.en} ${hijriDate.year}`;
 
-      // Add Tahajjud, Sunrise, and Israq to the prayers array
-      const prayers = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha', 'Tahajjud'];
+      const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
       const now = new Date();
       let next = null;
-
-      // Calculate Israq time (15 minutes after Sunrise)
-      const [sunriseHours, sunriseMinutes] = timings['Sunrise'].split(':').map(Number);
-      const israqTime = new Date();
-      israqTime.setHours(sunriseHours, sunriseMinutes + 15, 0);
-      timings['Israq'] = `${israqTime.getHours()}:${israqTime.getMinutes()}`;
-
-      // Calculate Tahajjud time (last third of the night)
-      const [ishaHours, ishaMinutes] = timings['Isha'].split(':').map(Number);
-      const [fajrHours, fajrMinutes] = timings['Fajr'].split(':').map(Number);
-      const ishaTime = new Date();
-      ishaTime.setHours(ishaHours, ishaMinutes, 0);
-      const fajrTime = new Date();
-      fajrTime.setHours(fajrHours, fajrMinutes, 0);
-      const nightDuration = fajrTime - ishaTime;
-      const tahajjudTime = new Date(ishaTime.getTime() + (nightDuration * 2 / 3));
-      timings['Tahajjud'] = `${tahajjudTime.getHours()}:${tahajjudTime.getMinutes()}`;
 
       for (let i = 0; i < prayers.length; i++) {
         const prayer = prayers[i];
@@ -139,8 +136,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   }
 
+  // Call function on page load
   getPrayerTimings();
+
+  // Check every 10 minutes for location change
+  setInterval(() => {
+    getPrayerTimings(true); // Force update if location changes
+  }, 10 * 60 * 1000); // 10 minutes
 });
+
 // Function to open the settings panel
 
 function openSettings() {
