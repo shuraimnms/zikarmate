@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     initializeApp();
-    setInterval(getUserLocation, 600000); // Refresh location every 10 minutes (600000ms)
+    setInterval(getUserLocation, 600000); // Refresh location every 10 minutes
 });
 
 function initializeApp() {
@@ -8,12 +8,11 @@ function initializeApp() {
     createRozaTracker();
     updateRozaProgress();
     applySavedPreferences();
-    getUserLocation(); // Get user location & calculate timings
+    getUserLocation();
 }
 
 function setupEventListeners() {
-    const modeToggle = document.getElementById("dark-mode-toggle");
-    modeToggle.addEventListener("click", toggleDarkMode);
+    document.getElementById("dark-mode-toggle").addEventListener("click", toggleDarkMode);
     document.getElementById("toggle-language").addEventListener("click", toggleLanguage);
     document.getElementById("calculate-zakat").addEventListener("click", calculateZakat);
 }
@@ -33,21 +32,20 @@ function toggleDarkMode() {
 
 function toggleLanguage() {
     const currentLang = document.getElementById("title").textContent;
-    if (currentLang === "Ramadan Tracker") {
-        document.getElementById("title").textContent = "رمضان ٹریکر";
-    } else {
-        document.getElementById("title").textContent = "Ramadan Tracker";
-    }
+    document.getElementById("title").textContent = currentLang === "Ramadan Tracker" ? "رمضان ٹریکر" : "Ramadan Tracker";
 }
 
+// 📌 **Zakat Calculator (Now in Indian Rupees)**
 function calculateZakat() {
     const amount = parseFloat(document.getElementById("zakat-input").value);
+    
     if (isNaN(amount) || amount <= 0) {
-        document.getElementById("zakat-result").textContent = "Please enter a valid amount.";
+        document.getElementById("zakat-result").textContent = "براہ کرم درست رقم درج کریں۔";
         return;
     }
-    const zakat = (amount * 2.5) / 100;
-    document.getElementById("zakat-result").textContent = `Your Zakat: $${zakat.toFixed(2)}`;
+
+    const zakat = (amount * 2.5) / 100; // 2.5% Zakat Calculation
+    document.getElementById("zakat-result").textContent = `آپ کا زکوٰة: ₹${zakat.toFixed(2)}`;
 }
 
 // 🌍 Get User's Location & Fetch Timings
@@ -63,25 +61,21 @@ function getUserLocation() {
     }
 }
 
-// 📌 Fetch Suhur & Iftar based on user's location
+// 📌 Fetch Suhur & Iftar Timings
 function fetchPrayerTimes(position) {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
-    const apiURL = `https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=1`; // Karachi Uni Method
+    const apiURL = `https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=1`;
 
     fetch(apiURL)
         .then(response => response.json())
         .then(data => {
             const timings = data.data.timings;
-            const suhurTime = convertTo12HourFormat(timings.Fajr);
-            const iftarTime = convertTo12HourFormat(timings.Maghrib);
-
-            document.getElementById("suhur-time").textContent = `Suhur: ${suhurTime}`;
-            document.getElementById("iftar-time").textContent = `Iftar: ${iftarTime}`;
+            document.getElementById("suhur-time").textContent = `Suhur: ${convertTo12HourFormat(timings.Fajr)}`;
+            document.getElementById("iftar-time").textContent = `Iftar: ${convertTo12HourFormat(timings.Maghrib)}`;
         })
         .catch(error => console.error("Error fetching prayer times:", error));
 
-    // 📍 Get and display the user's city/town name
     fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
         .then(response => response.json())
         .then(data => {
@@ -106,12 +100,7 @@ function convertTo12HourFormat(time) {
     return `${hours}:${minutes} ${period}`;
 }
 
-function applySavedPreferences() {
-    document.body.classList.add("dark-mode"); // Always start in dark mode
-    const modeToggle = document.getElementById("dark-mode-toggle");
-    modeToggle.textContent = "Light Mode"; // Initial button text
-}
-
+// 🌙 **Roza Tracker (Fast Tracking)**
 function createRozaTracker() {
     const rozaDays = document.getElementById("calendar");
     rozaDays.innerHTML = "";
@@ -141,6 +130,7 @@ function createRozaTracker() {
     }
 }
 
+// 🔄 **Update Roza Progress**
 function updateRozaProgress() {
     let completedFasts = 0;
 
@@ -155,7 +145,7 @@ function updateRozaProgress() {
     document.getElementById("total-fasts").innerText = `${completedFasts}/30`;
 }
 
-// ❌ Handle Geolocation Errors
+// ❌ **Handle Geolocation Errors**
 function showError(error) {
     switch (error.code) {
         case error.PERMISSION_DENIED:
@@ -171,4 +161,10 @@ function showError(error) {
             alert("An unknown error occurred.");
             break;
     }
+}
+
+// 🎨 **Apply Saved Preferences (Always Start in Dark Mode)**
+function applySavedPreferences() {
+    document.body.classList.add("light-mode");
+    document.getElementById("dark-mode-toggle").textContent = "Light Mode";
 }

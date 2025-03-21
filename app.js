@@ -4,16 +4,9 @@ document.addEventListener('DOMContentLoaded', async function () {
   const nextPrayer = document.getElementById('next-prayer');
   const hijriDateDisplay = document.getElementById('hijri-date');
 
-  async function fetchLocation(forceUpdate = false) {
+  async function fetchLocation() {
     return new Promise((resolve, reject) => {
-      if (!forceUpdate && localStorage.getItem('lat') && localStorage.getItem('lon')) {
-        // Use stored location if no force update
-        resolve({
-          lat: localStorage.getItem('lat'),
-          lon: localStorage.getItem('lon'),
-          userCity: localStorage.getItem('userCity') || 'Saved Location',
-        });
-      } else if (navigator.geolocation) {
+      if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           async (position) => {
             const lat = position.coords.latitude;
@@ -23,7 +16,6 @@ document.addEventListener('DOMContentLoaded', async function () {
               const locRes = await fetch(
                 `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
               );
-
               if (locRes.ok) {
                 const locData = await locRes.json();
                 const userCity =
@@ -33,19 +25,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                   locData.address.state ||
                   'Unknown Location';
 
-                // Compare with previous location
-                const lastLat = localStorage.getItem('lat');
-                const lastLon = localStorage.getItem('lon');
-
-                if (lat.toFixed(2) !== lastLat?.toFixed(2) || lon.toFixed(2) !== lastLon?.toFixed(2)) {
-                  console.log('Location changed! Updating...');
-                  localStorage.setItem('userCity', userCity);
-                  localStorage.setItem('lat', lat);
-                  localStorage.setItem('lon', lon);
-                  resolve({ lat, lon, userCity });
-                } else {
-                  resolve({ lat, lon, userCity });
-                }
+                localStorage.setItem('userCity', userCity);
+                localStorage.setItem('lat', lat);
+                localStorage.setItem('lon', lon);
+                resolve({ lat, lon, userCity });
               } else {
                 reject('Error fetching city name');
               }
@@ -54,9 +37,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
           },
           (error) => {
-            if (error.code === error.PERMISSION_DENIED) {
-              alert('Location permission denied. Using last saved location.');
-            }
+            alert('Location permission denied. Using last saved location.');
             reject('Location access denied');
           }
         );
@@ -73,11 +54,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     return `${hours}:${minutes.toString().padStart(2, '0')} ${period}`;
   }
 
-  async function getPrayerTimings(forceUpdate = false) {
+  async function getPrayerTimings() {
     let lat, lon, userCity;
 
     try {
-      const locationData = await fetchLocation(forceUpdate);
+      const locationData = await fetchLocation();
       lat = locationData.lat;
       lon = locationData.lon;
       userCity = locationData.userCity;
@@ -93,8 +74,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     try {
       const res = await fetch(
         `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=1`
-      ); // **Method 1 = Karachi Univ Calculation**
-
+      );
       if (!res.ok) throw new Error('Failed to fetch prayer timings');
 
       const data = await res.json();
@@ -136,12 +116,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   }
 
-  // Call function on page load
+  // Fetch location and prayer timings on page load
   getPrayerTimings();
 
-  // Check every 10 minutes for location change
+  // Refresh location and prayer timings every 10 minutes
   setInterval(() => {
-    getPrayerTimings(true); // Force update if location changes
+    getPrayerTimings();
   }, 10 * 60 * 1000); // 10 minutes
 });
 
@@ -594,5 +574,22 @@ document.getElementById("loadBookmark").addEventListener("click", () => {
       alert(`Your Bookmark: ${savedBookmark}`);
   } else {
       alert("No Bookmark Found!");
+  }
+});
+// Disable pinch zoom
+document.addEventListener("gesturestart", function (event) {
+  event.preventDefault();
+});
+
+// Prevent zoom with Ctrl + Scroll & Ctrl + Plus/Minus
+document.addEventListener("wheel", function (event) {
+  if (event.ctrlKey) {
+      event.preventDefault();
+  }
+}, { passive: false });
+
+document.addEventListener("keydown", function (event) {
+  if (event.ctrlKey && (event.key === "+" || event.key === "-")) {
+      event.preventDefault();
   }
 });

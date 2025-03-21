@@ -3,22 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surah & Juzz List</title>
-    <link rel="stylesheet" href="styles/style.css">
+    <title>List</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <header>
-        <h1 id="list-title">Surahs / Juzz</h1>
-        <input type="text" id="search-bar" placeholder="Search..." onkeyup="searchList()">
+        <button onclick="goBack()">⬅ Back</button>
+        <h1 id="list-title"></h1>
     </header>
-    <main>
-        <div id="list-container" class="list-container">
-            <!-- Surah/Juzz items will be loaded here -->
-        </div>
-    </main>
 
-  
+    <div id="list-container"></div>
 
-    <script src="scripts/app.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

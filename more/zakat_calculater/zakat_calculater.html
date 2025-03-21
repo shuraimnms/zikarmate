@@ -3,43 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zakat Calculator</title>
+  <title>Zakat Calculator | زکوٰۃ کیلکولیٹر</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
   <div class="zakat-container">
     <div class="header">
-      <h1>Zakat Calculator | زکوٰۃ کیلکولیٹر</h1>
-      <p class="subtitle">Calculate your Zakat easily | آسانی سے زکوٰۃ کا حساب لگائیں</p>
+      <h1 id="title">Zakat Calculator | زکوٰۃ کیلکولیٹر</h1>
+      <p id="subtitle" class="subtitle">Calculate your Zakat easily | آسانی سے زکوٰۃ کا حساب لگائیں</p>
+      <button id="toggle-language">اردو</button>
     </div>
 
     <form id="zakat-form">
       <div class="input-group">
-        <label for="cash">Cash & Savings (in INR) | نقدی اور بچت (روپے):</label>
-        <input type="number" id="cash" placeholder="Enter cash amount in INR" required>
+        <label for="gold-value" id="gold-label">Gold Worth (INR) | سونے کی مالیت:</label>
+        <input type="number" id="gold-value" placeholder="Enter gold worth">
       </div>
 
       <div class="input-group">
-        <label for="gold">Gold (in grams) | سونا (گرام):</label>
-        <input type="number" id="gold" placeholder="Enter gold in grams" required>
+        <label for="silver-value" id="silver-label">Silver Worth (INR) | چاندی کی مالیت:</label>
+        <input type="number" id="silver-value" placeholder="Enter silver worth">
       </div>
 
       <div class="input-group">
-        <label for="silver">Silver (in grams) | چاندی (گرام):</label>
-        <input type="number" id="silver" placeholder="Enter silver in grams" required>
+        <label for="cash-value" id="cash-label">Cash & Savings (INR) | نقدی اور بچت:</label>
+        <input type="number" id="cash-value" placeholder="Enter cash amount">
       </div>
 
       <div class="input-group">
-        <label for="business">Business Assets (in INR) | کاروباری اثاثے (روپے):</label>
-        <input type="number" id="business" placeholder="Enter business assets in INR" required>
+        <label for="business-value" id="business-label">Business Assets (INR) | کاروباری اثاثے:</label>
+        <input type="number" id="business-value" placeholder="Enter business assets worth">
       </div>
 
-      <button type="submit" class="calculate-button">Calculate Zakat | زکوٰۃ کا حساب لگائیں</button>
+      <div class="input-group">
+        <label for="property-value" id="property-label">Property & Investments (INR) | جائیداد اور سرمایہ کاری:</label>
+        <input type="number" id="property-value" placeholder="Enter property worth">
+      </div>
+
+      <button type="submit" class="calculate-button" id="calculate-button">Calculate Zakat | زکوٰۃ کا حساب لگائیں</button>
     </form>
 
     <div id="zakat-result" class="result">
-      <h2>Zakat Amount | زکوٰۃ کی رقم:</h2>
+      <h2 id="zakat-label">Zakat Amount | زکوٰۃ کی رقم:</h2>
       <p id="zakat-amount">₹0.00</p>
       <p id="nisab-status"></p>
       <p id="why-zakat" class="why"></p>
@@ -50,11 +57,8 @@
       <div class="hadith-content">
         <p><strong>1. ابو ہریرہ رضی اللہ عنہ:</strong> رسول اللہ صلی اللہ علیہ وسلم نے فرمایا: "جو اپنی زکوٰۃ ادا کرے گا، اس کے مال سے برائی ختم ہو جائے گی۔" (بخاری)</p>
         <p><strong>2. قرآن:</strong> "نماز قائم کرو اور زکوٰۃ ادا کرو، اور جو بھی نیکی تم اپنے لئے پیش کرو گے، تم اسے اللہ کے پاس پاؤ گے۔" (قرآن 2:110)</p>
-        <p><strong>3. ابن عباس رضی اللہ عنہ:</strong> رسول اللہ صلی اللہ علیہ وسلم نے فرمایا: "اللہ نے ان کے مال پر زکوٰۃ کو فرض کیا ہے۔" (بخاری)</p>
       </div>
     </div>
   </div>
-
-  <script src="script.js"></script>
 </body>
 </html>

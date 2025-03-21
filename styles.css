@@ -19,6 +19,11 @@ body {
   margin: 0 auto;
   padding: 20px;
 }
+html, body {
+    touch-action: manipulation; /* Prevents double-tap zoom */
+    overflow-x: hidden; /* Avoids accidental zoom from side scrolling */
+}
+
 
 /* Mobile-specific styles */
 

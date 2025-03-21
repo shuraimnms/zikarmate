@@ -4,22 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quran App</title>
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <header>
-        <h1>Welcome to the Quran App</h1>
+        <h1>📖 Quran App</h1>
     </header>
-    <main>
-         <div id="surah-folder" class="folder">
-            <h2>Surahs</h2>
-            <h2> سورۃ </h2>
-        </div>
-        <div id="juzz-folder" class="folder">
-            <h2>Juzz</h2>
-            <h2> جزء </h2>
-        </div>
-    </main>
-    <script src="scripts/app.js"></script>
+
+    <div class="continue-container">
+        <button id="continue-reading">📖 Continue Reading</button>
+    </div>
+
+    <div class="folder-container">
+        <div class="folder" id="surah-folder">📂 Surahs</div>
+        <div class="folder" id="juz-folder">📂 Juz</div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

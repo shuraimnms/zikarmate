@@ -1,40 +1,46 @@
 /* Global Styles */
 body {
   margin: 0;
-  font-family: 'Arial', sans-serif;
-  background: linear-gradient(to bottom, #145214, #0b6623, #50c878);
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom, #0a0a0a, #1b1b1b, #2c2c2c);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   color: #fff;
-  padding: 10px;
+  text-align: center;
 }
 
 /* Zakat Container */
 .zakat-container {
-  width: 100%;
-  max-width: 600px;
-  background: rgba(4, 16, 32, 0.9);
-  color: #145214;
-  padding: 20px 25px;
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-  text-align: center;
+  width: 90%;
+  max-width: 500px;
+  background: rgba(255, 215, 0, 0.15); /* Golden glass effect */
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0px 5px 20px rgba(255, 215, 0, 0.3);
+  border: 1px solid rgba(255, 215, 0, 0.2);
 }
 
+/* Header */
 .header h1 {
-  font-size: 28px;
-  margin-bottom: 10px;
-  color: #026655;
-  text-shadow: 1px 1px 5px #0d0116;
+  font-size: 30px;
+  font-weight: bold;
+  background: linear-gradient(to right, #ffd700, #ffcc00);
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.4);
 }
 
 .subtitle {
   font-size: 16px;
-  color: #ffffff;
+  color: #f0e68c;
+  margin-bottom: 20px;
 }
 
+/* Input Fields */
 .input-group {
   margin-bottom: 15px;
 }
@@ -42,92 +48,133 @@ body {
 label {
   display: block;
   font-size: 14px;
+  font-weight: bold;
+  color: #ffd700;
   margin-bottom: 5px;
-  color: #f5fdf7;
 }
 
-input[type="number"] {
+input {
   width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: rgba(0, 0, 0, 0.05);
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255, 215, 0, 0.1);
   outline: none;
-  font-size: 14px;
-  color: #333;
+  font-size: 16px;
+  color: #fff;
+  box-shadow: inset 0px 2px 5px rgba(255, 215, 0, 0.2);
+  transition: all 0.3s ease-in-out;
 }
 
 input:focus {
-  border-color: #50c878;
+  background: rgba(255, 215, 0, 0.2);
+  box-shadow: 0px 0px 10px rgba(255, 215, 0, 0.5);
 }
 
+/* Calculate Button */
 .calculate-button {
-  background: #0b6623;
-  color: #fff;
+  background: linear-gradient(to right, #ffd700, #ffcc00);
+  color: #000;
   border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
-  font-size: 16px;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 18px;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s;
+  box-shadow: 0px 5px 15px rgba(255, 215, 0, 0.3);
+  transition: all 0.3s ease-in-out;
 }
 
 .calculate-button:hover {
-  background: #50c878;
   transform: scale(1.05);
+  box-shadow: 0px 8px 20px rgba(255, 215, 0, 0.5);
 }
 
+/* Zakat Result */
 .result {
   margin-top: 20px;
   display: none;
+  padding: 20px;
+  border-radius: 15px;
+  background: rgba(255, 215, 0, 0.2);
+  box-shadow: 0px 5px 15px rgba(255, 215, 0, 0.3);
 }
 
 .result h2 {
-  font-size: 20px;
-  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: bold;
+  background: linear-gradient(to right, #ffd700, #ffcc00);
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 .result p {
-  font-size: 16px;
-}
-
-.why {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: bold;
-  margin-top: 10px;
+  color: #fff;
 }
 
+/* Language Toggle Button */
+#toggle-language {
+  background: rgba(255, 215, 0, 0.3);
+  color: #000;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+#toggle-language:hover {
+  background: rgba(255, 215, 0, 0.6);
+  transform: scale(1.05);
+}
+
+/* Hadith Section */
 .hadith-section {
   margin-top: 20px;
 }
 
 .toggle-hadith {
-  background: #1f3101;
-  color: #0094d8;
+  background: linear-gradient(to right, #ffd700, #ffcc00);
+  color: #000;
   border: none;
-  padding: 15px 20px;
-  border-radius: 20px;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
+  box-shadow: 0px 5px 15px rgba(255, 215, 0, 0.3);
+  transition: all 0.3s ease-in-out;
 }
 
 .toggle-hadith:hover {
-  background: #fbfcfb;
+  transform: scale(1.05);
+  box-shadow: 0px 8px 20px rgba(255, 215, 0, 0.5);
 }
 
 .hadith-content {
   margin-top: 10px;
   display: none;
+  padding: 15px;
+  border-radius: 10px;
+  background: rgba(255, 215, 0, 0.2);
+  box-shadow: 0px 5px 15px rgba(255, 215, 0, 0.3);
+  font-size: 16px;
+  color: #fff;
   text-align: left;
-  font-size: 19px;
-  color: #fdfdfd;
-  animation: fadeIn 0.5s ease;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .zakat-container {
+    width: 95%;
+    padding: 20px;
   }
-  to {
-    opacity: 1;
+  
+  .calculate-button, .toggle-hadith {
+    font-size: 16px;
+    padding: 10px 18px;
   }
 }
