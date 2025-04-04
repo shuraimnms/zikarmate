@@ -19,11 +19,15 @@ body {
   margin: 0 auto;
   padding: 20px;
 }
+
 html, body {
-    touch-action: manipulation; /* Prevents double-tap zoom */
-    overflow-x: hidden; /* Avoids accidental zoom from side scrolling */
+  touch-action: manipulation; /* Prevents double-tap zoom */
+  overflow-x: hidden; /* Avoids accidental zoom from side scrolling */
 }
 
+meta[name="viewport"] {
+  content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+}
 
 /* Mobile-specific styles */
 

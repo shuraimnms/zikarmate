@@ -140,7 +140,8 @@ function getIslamicDate() {
       "Ramadan", "Shawwal", "Dhu al-Qi'dah", "Dhu al-Hijjah"
     ];
 
-    const date = new Date();
+    let date = new Date(); // No need to add extra day
+
     const islamicFormatter = new Intl.DateTimeFormat('en-TN-u-ca-islamic', {
       day: 'numeric',
       month: 'numeric',
@@ -148,33 +149,14 @@ function getIslamicDate() {
     });
     const formattedDate = islamicFormatter.formatToParts(date);
 
-    // Extract day, month, and year
     let day = parseInt(formattedDate.find(part => part.type === 'day').value, 10);
     const monthIndex = parseInt(formattedDate.find(part => part.type === 'month').value, 10) - 1;
     const year = formattedDate.find(part => part.type === 'year').value;
 
-    // Apply an offset to match local moon sightings
-    const offset = -1; // Adjust this value (-1, 0, +1, etc.) based on your location
-    day += offset;
-
-    // Handle day overflow/underflow
-    if (day < 1) {
-      // Go to the previous month
-      const prevMonthIndex = (monthIndex === 0) ? 11 : monthIndex - 1;
-      const prevMonthDays = (prevMonthIndex === 1) ? 29 : 30; // Safar has 29 days; others typically 30
-      day += prevMonthDays;
-    } else if (day > 30) {
-      // Go to the next month
-      day -= 30;
-    }
-
-    // Map month index to Islamic month name
     const islamicMonth = islamicMonths[monthIndex];
-
     return `${day} ${islamicMonth} ${year}`;
   } catch (error) {
-    // Fallback to manual calculation if Intl fails
-    return calculateHijriFallback();
+    return "Error fetching Islamic date";
   }
 }
 
