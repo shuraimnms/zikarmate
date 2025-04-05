@@ -1,26 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quran App</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DeenPlus - Main</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Roboto:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+      text-align: center;
+      border: 5px solid #16a085;
+      border-radius: 15px;
+      margin: 10px;
+    }
+  
+    h1 {
+      font-size: 2.5rem;
+      color: #16a085;
+      margin-bottom: 30px;
+      border-bottom: 3px dashed #16a085;
+      padding-bottom: 10px;
+      display: inline-block;
+    }
+  
+    button {
+      padding: 12px 25px;
+      margin: 10px;
+      font-size: 18px;
+      border: 2px solid #16a085;
+      background-color: #2c3e50;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+  
+    button:hover {
+      background-color: #34495e;
+      transform: scale(1.03);
+    }
+  
+    .menu {
+      margin-top: 40px;
+      padding: 20px;
+      border: 2px solid #16a085;
+      border-radius: 10px;
+      background: #ffffff;
+      display: inline-block;
+    }
+  </style>
+  
 </head>
 <body>
+  <h1>🕌 DeenPlus</h1>
+  <div class="menu">
+    <a href="list.html?type=surah"><button>📘 Surah List</button></a>
+    <a href="list.html?type=juz"><button>📗 Juzz List</button></a>
+    <button onclick="continueReading()">▶ Continue Reading</button>
+    <a href="saved.html"><button>⭐ Saved Ayahs</button></a>
+  </div>
 
-    <header>
-        <h1>📖 Quran App</h1>
-    </header>
-
-    <div class="continue-container">
-        <button id="continue-reading">📖 Continue Reading</button>
-    </div>
-
-    <div class="folder-container">
-        <div class="folder" id="surah-folder">📂 Surahs</div>
-        <div class="folder" id="juz-folder">📂 Juz</div>
-    </div>
-
-    <script src="script.js"></script>
+  <script>
+    function continueReading() {
+      try {
+        const last = JSON.parse(localStorage.getItem("lastRead"));
+        if (!last || !last.type || !last.number) {
+          alert("No valid reading history found.");
+          return;
+        }
+        if (last.type === "surah") {
+          window.location.href = `quran.html?surah=${last.number}`;
+        } else if (last.type === "juz") {
+          window.location.href = `quran.html?juz=${last.number}`;
+        } else {
+          alert("Reading history type invalid.");
+        }
+      } catch (e) {
+        alert("Error reading history.");
+      }
+    }
+  </script>
 </body>
 </html>

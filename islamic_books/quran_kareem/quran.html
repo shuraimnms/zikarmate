@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DeenPlus - Quran</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Roboto:wght@500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f9f8;
+      color: #222;
+    }
+    #surah-title {
+      text-align: center;
+      padding: 20px 10px;
+      background: #1abc9c;
+      color: white;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    #quran-container {
+      padding: 20px 10px;
+      padding-bottom: 130px;
+    }
+    .ayah {
+      margin-bottom: 25px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+    }
+    .arabic {
+      background: #fff5e6;
+      padding: 15px;
+      direction: rtl;
+      font-family: 'Amiri', serif;
+      font-size: 1.6rem;
+      text-align: right;
+      font-weight: bold;
+      border-bottom: 1px solid #f0d9b5;
+    }
+    .english {
+      background: #eaf6f6;
+      padding: 15px;
+      font-size: 1rem;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+    .ayah-num {
+      background: #d1f2eb;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+      color: #117a65;
+    }
+    audio {
+      width: 100%;
+      display: block;
+      border-top: 1px solid #ccc;
+    }
+    .footer-controls {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #1abc9c;
+      color: white;
+      padding: 10px 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+      z-index: 10;
+    }
+    .footer-controls button {
+      font-size: 14px;
+      padding: 8px 12px;
+      border-radius: 5px;
+      background: #148f77;
+      border: none;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .footer-controls button:hover {
+      background: #117a65;
+    }
+    .speed-label {
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+    }
+    .speed-label span {
+      margin: 0 10px;
+      font-size: 16px;
+    }
+    .fav-btn {
+      display: block;
+      width: 100%;
+      background: #ffe599;
+      border: none;
+      padding: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .fav-btn:disabled {
+      background: #dff0d8;
+      color: #4cae4c;
+      cursor: not-allowed;
+    }
+    @media screen and (max-width: 600px) {
+      .arabic { font-size: 1.3rem; }
+      .english { font-size: 0.95rem; }
+      .footer-controls button {
+        font-size: 13px;
+        padding: 6px 10px;
+      }
+      .speed-label span { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<h2 id="surah-title">📖 Loading...</h2>
+<div id="quran-container"></div>
+
+<div class="footer-controls">
+  <button onclick="toggleScroll()" id="scrollBtn">Auto Scroll: OFF</button>
+  <div class="speed-label">
+    Speed:
+    <button onclick="changeSpeed(-1)">➖</button>
+    <span id="speedValue">3</span>
+    <button onclick="changeSpeed(1)">➕</button>
+  </div>
+  <button onclick="window.location.href='index.html'">⬅ Back</button>
+</div>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  const surah = params.get("surah");
+  const juz = params.get("juz");
+  const container = document.getElementById("quran-container");
+  const title = document.getElementById("surah-title");
+
+  let scrollOn = false;
+  let scrollInterval;
+  let speed = 3;
+
+  const speedValue = document.getElementById("speedValue");
+  const scrollBtn = document.getElementById("scrollBtn");
+
+  function toggleScroll() {
+    scrollOn = !scrollOn;
+    scrollBtn.innerText = `Auto Scroll: ${scrollOn ? 'ON' : 'OFF'}`;
+    scrollOn ? startAutoScroll() : stopAutoScroll();
+  }
+
+  function startAutoScroll() {
+    stopAutoScroll();
+    scrollInterval = setInterval(() => window.scrollBy(0, 1), Math.max(1, 1000 / speed));
+  }
+
+  function stopAutoScroll() {
+    clearInterval(scrollInterval);
+  }
+
+  function changeSpeed(delta) {
+    speed = Math.max(1, speed + delta);
+    speedValue.innerText = speed;
+    if (scrollOn) startAutoScroll();
+  }
+
+  function addToFavorites(ayahData) {
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const exists = favorites.some(f =>
+      f.type === ayahData.type &&
+      f.number === ayahData.number &&
+      f.ayah === ayahData.ayah
+    );
+    if (!exists) {
+      favorites.push(ayahData);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+    }
+  }
+
+  function displayAyahs(ayahs, type, num) {
+    container.innerHTML = "";
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+    ayahs.forEach((ayah, index) => {
+      const ayahNum = ayah.number?.inSurah || index + 1;
+      const div = document.createElement("div");
+      div.className = "ayah";
+      div.id = `ayah-${ayahNum}`;
+
+      const isSaved = favorites.some(f =>
+        f.type === type && f.number == num && f.ayah === ayahNum
+      );
+
+      div.innerHTML = `
+        <div class="ayah-num">Ayah ${ayahNum}</div>
+        <div class="arabic">${ayah.text.arab}</div>
+        <div class="english">${ayah.translation.en}</div>
+        <audio controls src="${ayah.audio.primary}"></audio>
+        <button class="fav-btn" id="fav-${type}-${num}-${ayahNum}" ${isSaved ? 'disabled' : ''}>
+          ${isSaved ? '✅ Saved' : '⭐ Add to Favorite'}
+        </button>
+      `;
+
+      const favBtn = div.querySelector(`#fav-${type}-${num}-${ayahNum}`);
+      favBtn.addEventListener('click', () => {
+        const ayahData = {
+          type,
+          number: num,
+          ayah: ayahNum,
+          text_ar: ayah.text.arab,
+          text_en: ayah.translation.en,
+          audio: ayah.audio.primary
+        };
+        addToFavorites(ayahData);
+        favBtn.innerText = "✅ Saved";
+        favBtn.disabled = true;
+      });
+
+      div.addEventListener('click', () => {
+        const lastRead = { type, number: num, ayah: ayahNum };
+        localStorage.setItem('lastRead', JSON.stringify(lastRead));
+      });
+
+      container.appendChild(div);
+    });
+
+    const last = JSON.parse(localStorage.getItem("lastRead"));
+    if (last && last.type === type && parseInt(last.number) === parseInt(num)) {
+      const el = document.getElementById(`ayah-${last.ayah}`);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    const audios = document.querySelectorAll("audio");
+    audios.forEach(audio => {
+      audio.addEventListener("play", () => {
+        audios.forEach(a => { if (a !== audio) a.pause(); });
+      });
+    });
+  }
+
+  function loadSurah(num) {
+    fetch(`https://api.quran.gading.dev/surah/${num}`)
+      .then(res => res.json())
+      .then(data => {
+        title.innerText = `${data.data.name.transliteration.en} - ${data.data.name.translation.en}`;
+        displayAyahs(data.data.verses, "surah", num);
+      });
+  }
+
+  function loadJuz(num) {
+    fetch(`https://api.quran.gading.dev/juz/${num}`)
+      .then(res => res.json())
+      .then(data => {
+        title.innerText = `📗 Juz ${num}`;
+        const allAyahs = [];
+        data.data.verses.forEach(surah => {
+          allAyahs.push(...surah.verses);
+        });
+        displayAyahs(allAyahs, "juz", num);
+      });
+  }
+
+  if (surah) loadSurah(surah);
+  else if (juz) loadJuz(juz);
+  else container.innerHTML = "<p style='text-align:center;'>❌ Surah or Juz not found</p>";
+</script>
+
+</body>
+</html>

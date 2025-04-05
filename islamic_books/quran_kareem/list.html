@@ -1,20 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DeenPlus - List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h2 {
+      color: #2e7d32;
+    }
+    #list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px auto;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      border: none;
+      background-color: #4caf50;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #388e3c;
+    }
+    a {
+      display: block;
+      margin-top: 20px;
+    }
+    @media (max-width: 600px) {
+      button {
+        width: 90%;
+        font-size: 14px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <h2 id="title">Loading...</h2>
+  <div id="list"></div>
+  <a href="index.html"><button>⬅ Back</button></a>
 
-    <header>
-        <button onclick="goBack()">⬅ Back</button>
-        <h1 id="list-title"></h1>
-    </header>
+  <script>
+    const type = new URLSearchParams(location.search).get("type");
+    const listContainer = document.getElementById("list");
+    const title = document.getElementById("title");
 
-    <div id="list-container"></div>
+    const juzzNames = [
+      "Alif Lam Meem", "Sayaqool", "Tilkal Rusul", "Lan Tana Loo",
+      "Wal Mohsanat", "La Yuhibbullah", "Wa Iza Samiu", "Wa Lau Annana",
+      "Qalal Malao", "Wa A'lamu", "Yatazeroon", "Wa Mamin Da'abat",
+      "Wa Ma Ubrioo", "Rubama", "Subhanallazi", "Qadd Aflaha",
+      "Iqtarabat", "Qadd Aflaha", "Wa Qalallazina", "A'man Khalaq",
+      "Utlu Ma Oohi", "Wa Manyaqnut", "Wama Liya", "Faman Azlam",
+      "Elahe Yuruddu", "Ha Meem", "Qala Fama Khatbukum", "Qadd Sami Allah",
+      "Tabarakallazi", "Amma Yatasa'aloon"
+    ];
 
-    <script src="script.js"></script>
+    if (type === "surah") {
+      title.innerText = "📘 Surah List";
+      fetch("https://api.quran.gading.dev/surah")
+        .then(res => res.json())
+        .then(data => {
+          data.data.forEach(surah => {
+            const btn = document.createElement("button");
+            btn.textContent = `${surah.number}. ${surah.name.transliteration.en}`;
+            btn.onclick = () => location.href = `quran.html?surah=${surah.number}`;
+            listContainer.appendChild(btn);
+          });
+        });
+    } else if (type === "juz") {
+      title.innerText = "📗 Juzz List";
+      juzzNames.forEach((name, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = `Juz ${index + 1}: ${name}`;
+        btn.onclick = () => location.href = `quran.html?juz=${index + 1}`;
+        listContainer.appendChild(btn);
+      });
+    } else {
+      title.innerText = "Invalid type";
+    }
+  </script>
 </body>
 </html>
