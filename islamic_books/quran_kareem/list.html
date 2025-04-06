@@ -5,43 +5,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>DeenPlus - List</title>
   <style>
+    * {
+      box-sizing: border-box;
+      transition: 0.3s ease;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1557682250-33bd709cbe85?auto=format&fit=crop&w=1600&q=80') no-repeat center center fixed;
+      background-size: cover;
       margin: 0;
       padding: 20px;
       text-align: center;
+      color: #fff;
+      backdrop-filter: blur(10px);
     }
+
     h2 {
-      color: #2e7d32;
+      color: #fff;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      text-shadow: 0 0 5px rgba(0,0,0,0.6);
     }
+
+    #search {
+      padding: 10px 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    #search::placeholder {
+      color: #eee;
+    }
+
     #list {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
+      gap: 15px;
       margin: 20px auto;
     }
-    button {
-      padding: 10px 15px;
+
+    button.item {
+      padding: 15px 20px;
       font-size: 16px;
-      border: none;
-      background-color: #4caf50;
-      color: white;
-      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      min-width: 250px;
+      text-align: left;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.1);
     }
-    button:hover {
-      background-color: #388e3c;
+
+    button.item:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(1.02);
     }
-    a {
-      display: block;
-      margin-top: 20px;
-    }
+
     @media (max-width: 600px) {
-      button {
-        width: 90%;
+      button.item {
+        font-size: 14px;
+        min-width: 90%;
+      }
+
+      #search {
         font-size: 14px;
       }
     }
@@ -49,24 +87,65 @@
 </head>
 <body>
   <h2 id="title">Loading...</h2>
+  <input type="text" id="search" placeholder="🔍 Search by name..." />
   <div id="list"></div>
-  <a href="index.html"><button>⬅ Back</button></a>
 
   <script>
     const type = new URLSearchParams(location.search).get("type");
     const listContainer = document.getElementById("list");
     const title = document.getElementById("title");
+    const searchInput = document.getElementById("search");
 
     const juzzNames = [
-      "Alif Lam Meem", "Sayaqool", "Tilkal Rusul", "Lan Tana Loo",
-      "Wal Mohsanat", "La Yuhibbullah", "Wa Iza Samiu", "Wa Lau Annana",
-      "Qalal Malao", "Wa A'lamu", "Yatazeroon", "Wa Mamin Da'abat",
-      "Wa Ma Ubrioo", "Rubama", "Subhanallazi", "Qadd Aflaha",
-      "Iqtarabat", "Qadd Aflaha", "Wa Qalallazina", "A'man Khalaq",
-      "Utlu Ma Oohi", "Wa Manyaqnut", "Wama Liya", "Faman Azlam",
-      "Elahe Yuruddu", "Ha Meem", "Qala Fama Khatbukum", "Qadd Sami Allah",
-      "Tabarakallazi", "Amma Yatasa'aloon"
+      ["Alif Lam Meem", "ٱلٓمٓ"],
+      ["Sayaqool", "سَيَقُولُ"],
+      ["Tilkal Rusul", "تِلْكَ ٱلرُّسُلُ"],
+      ["Lan Tana Loo", "لَن تَنَالُواْ"],
+      ["Wal Mohsanat", "وَٱلْمُحْصَنَاتُ"],
+      ["La Yuhibbullah", "لَا يُحِبُّ ٱللَّهُ"],
+      ["Wa Iza Samiu", "وَإِذَا سَمِعُواْ"],
+      ["Wa Lau Annana", "وَلَوْ أَنَّنَا"],
+      ["Qalal Malao", "قَالَ ٱلْمَلَأُ"],
+      ["Wa A'lamu", "وَٱعْلَمُواْ"],
+      ["Yatazeroon", "يَعْتَذِرُونَ"],
+      ["Wa Mamin Da'abat", "وَمَا مِن دَآبَّةٍ"],
+      ["Wa Ma Ubrioo", "وَمَا أُبَرِّئُ"],
+      ["Rubama", "رُبَمَا"],
+      ["Subhanallazi", "سُبْحَٰنَ ٱلَّذِى"],
+      ["Qadd Aflaha", "قَدْ أَفْلَحَ"],
+      ["Iqtarabat", "ٱقْتَرَبَتِ"],
+      ["Qadd Aflaha", "قَدْ أَفْلَحَ"],
+      ["Wa Qalallazina", "وَقَالَ ٱلَّذِينَ"],
+      ["A'man Khalaq", "أَمَّنْ خَلَقَ"],
+      ["Utlu Ma Oohi", "ٱتْلُ مَآ أُوحِىَ"],
+      ["Wa Manyaqnut", "وَمَن يَقْنُتْ"],
+      ["Wama Liya", "وَمَا لِىَ"],
+      ["Faman Azlam", "فَمَنْ أَظْلَمُ"],
+      ["Elahe Yuruddu", "إِلَيْهِ يُرَدُّ"],
+      ["Ha Meem", "حم"],
+      ["Qala Fama Khatbukum", "قَالَ فَمَا خَطْبُكُم"],
+      ["Qadd Sami Allah", "قَدْ سَمِعَ ٱللَّهُ"],
+      ["Tabarakallazi", "تَبَارَكَ ٱلَّذِى"],
+      ["Amma Yatasa'aloon", "عَمَّ يَتَسَآءَلُونَ"]
     ];
+
+    function createButton(text, arabicText, clickHandler) {
+      const btn = document.createElement("button");
+      btn.className = "item";
+      btn.innerHTML = `<b>${text}</b><br><span style="font-size: 1.2rem;">${arabicText}</span>`;
+      btn.onclick = clickHandler;
+      listContainer.appendChild(btn);
+    }
+
+    function filterList() {
+      const search = searchInput.value.toLowerCase();
+      const buttons = document.querySelectorAll("#list .item");
+      buttons.forEach(btn => {
+        btn.style.display = btn.textContent.toLowerCase().includes(search) ? "block" : "none";
+      });
+    }
+
+    searchInput.addEventListener("input", filterList);
 
     if (type === "surah") {
       title.innerText = "📘 Surah List";
@@ -74,19 +153,21 @@
         .then(res => res.json())
         .then(data => {
           data.data.forEach(surah => {
-            const btn = document.createElement("button");
-            btn.textContent = `${surah.number}. ${surah.name.transliteration.en}`;
-            btn.onclick = () => location.href = `quran.html?surah=${surah.number}`;
-            listContainer.appendChild(btn);
+            createButton(
+              `${surah.number}. ${surah.name.transliteration.en}`,
+              surah.name.short,
+              () => location.href = `quran.html?surah=${surah.number}`
+            );
           });
         });
     } else if (type === "juz") {
       title.innerText = "📗 Juzz List";
-      juzzNames.forEach((name, index) => {
-        const btn = document.createElement("button");
-        btn.textContent = `Juz ${index + 1}: ${name}`;
-        btn.onclick = () => location.href = `quran.html?juz=${index + 1}`;
-        listContainer.appendChild(btn);
+      juzzNames.forEach(([name, arabic], index) => {
+        createButton(
+          `Juz ${index + 1}: ${name}`,
+          arabic,
+          () => location.href = `quran.html?juz=${index + 1}`
+        );
       });
     } else {
       title.innerText = "Invalid type";

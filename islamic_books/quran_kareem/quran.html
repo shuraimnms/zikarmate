@@ -4,142 +4,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>DeenPlus - Quran</title>
+  <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Roboto:wght@500&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f4f9f8;
-      color: #222;
-    }
-    #surah-title {
-      text-align: center;
-      padding: 20px 10px;
-      background: #1abc9c;
-      color: white;
-      font-size: 1.8rem;
-      font-weight: bold;
-    }
-    #quran-container {
-      padding: 20px 10px;
-      padding-bottom: 130px;
-    }
-    .ayah {
-      margin-bottom: 25px;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
-    }
-    .arabic {
-      background: #fff5e6;
-      padding: 15px;
-      direction: rtl;
-      font-family: 'Amiri', serif;
-      font-size: 1.6rem;
-      text-align: right;
-      font-weight: bold;
-      border-bottom: 1px solid #f0d9b5;
-    }
-    .english {
-      background: #eaf6f6;
-      padding: 15px;
-      font-size: 1rem;
-      line-height: 1.6;
-      font-weight: 600;
-    }
-    .ayah-num {
-      background: #d1f2eb;
-      padding: 10px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 0.9rem;
-      color: #117a65;
-    }
-    audio {
-      width: 100%;
-      display: block;
-      border-top: 1px solid #ccc;
-    }
-    .footer-controls {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #1abc9c;
-      color: white;
-      padding: 10px 15px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
-      z-index: 10;
-    }
-    .footer-controls button {
-      font-size: 14px;
-      padding: 8px 12px;
-      border-radius: 5px;
-      background: #148f77;
-      border: none;
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .footer-controls button:hover {
-      background: #117a65;
-    }
-    .speed-label {
-      display: flex;
-      align-items: center;
-      font-weight: bold;
-    }
-    .speed-label span {
-      margin: 0 10px;
-      font-size: 16px;
-    }
-    .fav-btn {
-      display: block;
-      width: 100%;
-      background: #ffe599;
-      border: none;
-      padding: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    .fav-btn:disabled {
-      background: #dff0d8;
-      color: #4cae4c;
-      cursor: not-allowed;
-    }
-    @media screen and (max-width: 600px) {
-      .arabic { font-size: 1.3rem; }
-      .english { font-size: 0.95rem; }
-      .footer-controls button {
-        font-size: 13px;
-        padding: 6px 10px;
-      }
-      .speed-label span { font-size: 14px; }
-    }
-  </style>
 </head>
 <body>
 
-<h2 id="surah-title">📖 Loading...</h2>
-<div id="quran-container"></div>
+<main>
+  <h2 id="surah-title">📖 Loading...</h2>
 
-<div class="footer-controls">
-  <button onclick="toggleScroll()" id="scrollBtn">Auto Scroll: OFF</button>
-  <div class="speed-label">
-    Speed:
+  <!-- Search -->
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search Ayah...">
+    <button onclick="handleSearch()">🔍</button>
+    <button onclick="startVoiceSearch()">🎙️</button>
+  </div>
+
+  <!-- Go to Ayah -->
+  <div style="text-align:center; margin-top:10px;">
+    <input type="number" id="goToAyahInput" placeholder="Go to Ayah..." style="width:100px;">
+    <button onclick="goToAyah()">➡️</button>
+  </div>
+
+  <!-- Ayahs -->
+  <div id="quran-container"></div>
+
+  <!-- Footer -->
+  <div class="footer-controls">
+    <button onclick="toggleScroll()" id="scrollBtn">Auto Scroll: OFF</button>
     <button onclick="changeSpeed(-1)">➖</button>
     <span id="speedValue">3</span>
     <button onclick="changeSpeed(1)">➕</button>
+    <button id="darkModeBtn" onclick="toggleDarkMode()">🌙</button>
+    
   </div>
-  <button onclick="window.location.href='index.html'">⬅ Back</button>
-</div>
+</main>
 
 <script>
   const params = new URLSearchParams(location.search);
@@ -147,13 +45,20 @@
   const juz = params.get("juz");
   const container = document.getElementById("quran-container");
   const title = document.getElementById("surah-title");
+  const darkModeBtn = document.getElementById("darkModeBtn");
 
+  let currentAyahs = [];
   let scrollOn = false;
   let scrollInterval;
   let speed = 3;
-
   const speedValue = document.getElementById("speedValue");
   const scrollBtn = document.getElementById("scrollBtn");
+
+  // Load preferred mode
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+    darkModeBtn.textContent = "🌞";
+  }
 
   function toggleScroll() {
     scrollOn = !scrollOn;
@@ -176,71 +81,92 @@
     if (scrollOn) startAutoScroll();
   }
 
-  function addToFavorites(ayahData) {
-    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    const exists = favorites.some(f =>
-      f.type === ayahData.type &&
-      f.number === ayahData.number &&
-      f.ayah === ayahData.ayah
-    );
-    if (!exists) {
-      favorites.push(ayahData);
-      localStorage.setItem("favorites", JSON.stringify(favorites));
+  function toggleDarkMode() {
+    document.body.classList.toggle("dark");
+    const isDark = document.body.classList.contains("dark");
+    darkModeBtn.textContent = isDark ? "🌞" : "🌙";
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  }
+
+  function getFavorites() {
+    return JSON.parse(localStorage.getItem("favorites")) || [];
+  }
+
+  function toggleFavorite(ayahId) {
+    let favs = getFavorites();
+    const isFav = favs.includes(ayahId);
+
+    if (isFav) {
+      favs = favs.filter(f => f !== ayahId);
+    } else {
+      favs.push(ayahId);
+    }
+
+    localStorage.setItem("favorites", JSON.stringify(favs));
+
+    // Update button only
+    const btn = document.querySelector(`button[data-favid="${ayahId}"]`);
+    if (btn) btn.innerText = isFav ? "🤍 Save" : "⭐ Saved";
+  }
+
+  function isFavorite(ayahId) {
+    return getFavorites().includes(ayahId);
+  }
+
+  function copyAyah(arabic, english) {
+    const text = `${arabic || 'Arabic not found'}\n\n${english || 'Translation not found'}`;
+    navigator.clipboard.writeText(text).then(() => alert("📋 Ayah copied!"));
+  }
+
+  function shareAyah(arabic, english) {
+    const shareText = `📖 Quran Ayah:\n\n${arabic || ''}\n\n💬 ${english || ''}`;
+    if (navigator.share) {
+      navigator.share({ title: 'Quran Ayah', text: shareText }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(shareText).then(() => {
+        alert("📋 Ayah copied! You can now paste it anywhere.");
+      });
     }
   }
 
-  function displayAyahs(ayahs, type, num) {
+  function displayAyahs(ayahs) {
     container.innerHTML = "";
-    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const last = JSON.parse(localStorage.getItem("lastRead"));
 
-    ayahs.forEach((ayah, index) => {
-      const ayahNum = ayah.number?.inSurah || index + 1;
+    ayahs.forEach((ayah) => {
+      const ayahNum = ayah.number.inSurah;
+      const favId = `${surah ? "surah" : "juz"}-${surah || juz}-${ayahNum}`;
       const div = document.createElement("div");
       div.className = "ayah";
       div.id = `ayah-${ayahNum}`;
 
-      const isSaved = favorites.some(f =>
-        f.type === type && f.number == num && f.ayah === ayahNum
-      );
+      if (last?.type === (surah ? "surah" : "juz") && parseInt(last.number) === parseInt(surah || juz) && ayahNum === last.ayah) {
+        div.classList.add("highlight");
+        setTimeout(() => div.scrollIntoView({ behavior: "smooth", block: "start" }), 500);
+      }
 
       div.innerHTML = `
         <div class="ayah-num">Ayah ${ayahNum}</div>
-        <div class="arabic">${ayah.text.arab}</div>
-        <div class="english">${ayah.translation.en}</div>
-        <audio controls src="${ayah.audio.primary}"></audio>
-        <button class="fav-btn" id="fav-${type}-${num}-${ayahNum}" ${isSaved ? 'disabled' : ''}>
-          ${isSaved ? '✅ Saved' : '⭐ Add to Favorite'}
-        </button>
+        <div class="arabic">${ayah.text?.arab || '📖 Arabic not found'}</div>
+        <div class="english">${ayah.translation?.en || '💬 Translation not found'}</div>
+        <audio controls preload="none" src="${ayah.audio?.primary || ''}"></audio>
+        <div class="share-buttons">
+          <button onclick="copyAyah(\`${ayah.text?.arab || ''}\`, \`${ayah.translation?.en || ''}\`)">📋</button>
+          <button onclick="shareAyah(\`${ayah.text?.arab || ''}\`, \`${ayah.translation?.en || ''}\`)">🔗</button>
+          <button onclick="toggleFavorite('${favId}')" data-favid="${favId}">${isFavorite(favId) ? "⭐ Saved" : "🤍 Save"}</button>
+        </div>
       `;
 
-      const favBtn = div.querySelector(`#fav-${type}-${num}-${ayahNum}`);
-      favBtn.addEventListener('click', () => {
-        const ayahData = {
-          type,
-          number: num,
-          ayah: ayahNum,
-          text_ar: ayah.text.arab,
-          text_en: ayah.translation.en,
-          audio: ayah.audio.primary
-        };
-        addToFavorites(ayahData);
-        favBtn.innerText = "✅ Saved";
-        favBtn.disabled = true;
-      });
-
       div.addEventListener('click', () => {
-        const lastRead = { type, number: num, ayah: ayahNum };
-        localStorage.setItem('lastRead', JSON.stringify(lastRead));
+        localStorage.setItem('lastRead', JSON.stringify({
+          type: surah ? "surah" : "juz",
+          number: surah || juz,
+          ayah: ayahNum
+        }));
       });
 
       container.appendChild(div);
     });
-
-    const last = JSON.parse(localStorage.getItem("lastRead"));
-    if (last && last.type === type && parseInt(last.number) === parseInt(num)) {
-      const el = document.getElementById(`ayah-${last.ayah}`);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
 
     const audios = document.querySelectorAll("audio");
     audios.forEach(audio => {
@@ -250,26 +176,80 @@
     });
   }
 
-  function loadSurah(num) {
-    fetch(`https://api.quran.gading.dev/surah/${num}`)
-      .then(res => res.json())
-      .then(data => {
-        title.innerText = `${data.data.name.transliteration.en} - ${data.data.name.translation.en}`;
-        displayAyahs(data.data.verses, "surah", num);
-      });
+  async function loadSurah(num) {
+    try {
+      const res = await fetch(`https://api.quran.gading.dev/surah/${num}`);
+      const data = await res.json();
+      title.innerText = `${data.data.name.transliteration.en} - ${data.data.name.translation.en}`;
+      currentAyahs = data.data.verses;
+      displayAyahs(currentAyahs);
+    } catch {
+      container.innerHTML = "<p style='text-align:center;'>❌ Failed to load Surah.</p>";
+    }
   }
 
-  function loadJuz(num) {
-    fetch(`https://api.quran.gading.dev/juz/${num}`)
-      .then(res => res.json())
-      .then(data => {
-        title.innerText = `📗 Juz ${num}`;
-        const allAyahs = [];
-        data.data.verses.forEach(surah => {
-          allAyahs.push(...surah.verses);
-        });
-        displayAyahs(allAyahs, "juz", num);
-      });
+  async function loadJuz(num) {
+    try {
+      const res = await fetch(`https://api.quran.gading.dev/juz/${num}`);
+      const data = await res.json();
+      title.innerText = `📗 Juz ${num}`;
+      currentAyahs = data.data.verses;
+      displayAyahs(currentAyahs);
+    } catch {
+      container.innerHTML = "<p style='text-align:center;'>❌ Failed to load Juz.</p>";
+    }
+  }
+
+  function handleSearch() {
+    const input = document.getElementById("searchInput").value.trim().toLowerCase();
+    if (!input || currentAyahs.length === 0) return;
+
+    const filtered = currentAyahs.filter(ayah =>
+      ayah.text?.arab?.toLowerCase().includes(input) ||
+      ayah.translation?.en?.toLowerCase().includes(input) ||
+      String(ayah.number?.inSurah || "").includes(input)
+    );
+
+    if (filtered.length > 0) {
+      displayAyahs(filtered);
+      title.innerText = `🔍 Results for "${input}"`;
+    } else {
+      container.innerHTML = "<p style='text-align:center;'>❌ No matches found.</p>";
+    }
+  }
+
+  function startVoiceSearch() {
+    try {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) return alert("🎙️ Voice search not supported in this browser.");
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.start();
+
+      recognition.onresult = function (event) {
+        document.getElementById("searchInput").value = event.results[0][0].transcript;
+        handleSearch();
+      };
+
+      recognition.onerror = function () {
+        alert("🎙️ Voice recognition failed. Please try again.");
+      };
+    } catch {
+      alert("🎙️ Voice search not supported in this browser.");
+    }
+  }
+
+  function goToAyah() {
+    const ayahNum = parseInt(document.getElementById("goToAyahInput").value);
+    const element = document.getElementById(`ayah-${ayahNum}`);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
+      element.classList.add("highlight");
+      setTimeout(() => element.classList.remove("highlight"), 3000);
+    } else {
+      alert("❌ Ayah not found");
+    }
   }
 
   if (surah) loadSurah(surah);

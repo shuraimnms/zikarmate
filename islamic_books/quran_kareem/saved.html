@@ -13,6 +13,11 @@
       padding: 20px;
     }
 
+    body.dark {
+      background: #121212;
+      color: #f0f0f0;
+    }
+
     h2 {
       text-align: center;
       color: #1abc9c;
@@ -28,6 +33,11 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
+    body.dark .ayah {
+      background: #1e1e1e;
+      color: #f0f0f0;
+    }
+
     .arabic {
       font-family: 'Amiri', serif;
       font-size: 1.7rem;
@@ -37,10 +47,18 @@
       color: #2c3e50;
     }
 
+    body.dark .arabic {
+      color: #e0e0e0;
+    }
+
     .english {
       font-size: 1rem;
       color: #34495e;
       margin-bottom: 10px;
+    }
+
+    body.dark .english {
+      color: #cccccc;
     }
 
     audio {
@@ -62,19 +80,30 @@
     }
 
     .back-btn {
-      display: inline-block;
-      margin-top: 30px;
-      text-align: center;
+      display: block;
+      width: fit-content;
+      margin: 30px auto 0;
       padding: 10px 20px;
       background-color: #1abc9c;
       color: white;
       border: none;
       border-radius: 6px;
       text-decoration: none;
+      text-align: center;
     }
 
     .back-btn:hover {
       background-color: #16a085;
+    }
+
+    .meta {
+      font-size: 0.9rem;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    body.dark .meta {
+      color: #aaa;
     }
   </style>
 </head>
@@ -82,28 +111,33 @@
   <h2>⭐ Your Saved Ayahs</h2>
   <div id="savedContainer"></div>
 
-  <div style="text-align:center;">
-    <a class="back-btn" href="index.html">⬅ Back to Home</a>
-  </div>
 
   <script>
     const container = document.getElementById("savedContainer");
 
     function loadFavorites() {
       const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+
       if (favorites.length === 0) {
-        container.innerHTML = "<p style='text-align:center;'>No saved ayahs yet.</p>";
+        container.innerHTML = "<p style='text-align:center;'>❌ No saved ayahs yet.</p>";
         return;
       }
 
       container.innerHTML = "";
       favorites.forEach((fav, index) => {
+        const arabic = fav.arabic || '📖 Arabic not found';
+        const translation = fav.translation || '💬 Translation not found';
+        const audio = fav.audio || '';
+        const location = fav.location || '';
+        const ayahNum = fav.ayahNum || '';
+
         const div = document.createElement("div");
         div.className = "ayah";
         div.innerHTML = `
-          <div class="arabic">${fav.arabic}</div>
-          <div class="english">${fav.translation}</div>
-          <audio controls src="${fav.audio}"></audio>
+          <div class="meta">${location ? `📍 ${location}` : ''} ${ayahNum ? `| Ayah ${ayahNum}` : ''}</div>
+          <div class="arabic">${arabic}</div>
+          <div class="english">${translation}</div>
+          ${audio ? `<audio controls src="${audio}"></audio>` : ''}
           <button class="remove-btn" onclick="removeAyah(${index})">🗑 Remove</button>
         `;
         container.appendChild(div);
@@ -115,6 +149,11 @@
       favorites.splice(index, 1);
       localStorage.setItem("favorites", JSON.stringify(favorites));
       loadFavorites();
+    }
+
+    // Optional: Enable dark mode if previously set
+    if (localStorage.getItem("darkMode") === "true") {
+      document.body.classList.add("dark");
     }
 
     loadFavorites();
