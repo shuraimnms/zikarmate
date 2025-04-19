@@ -16,13 +16,17 @@ function requestLocationPermission(callback) {
 function handleLocationError(error) {
     if (error.code === error.PERMISSION_DENIED) {
         alert("Location access denied! Enable location in settings.");
+        updateFindMasjidButton("Turn on location");
     } else {
         alert("Error getting location. Please try again.");
+        updateFindMasjidButton("Turn on location");
     }
 }
 
 // Function to find nearby masjids (Opens Google Maps App in WebView)
 function findNearbyMasjid() {
+    updateFindMasjidButton("Finding...");
+
     requestLocationPermission((position) => {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
@@ -36,6 +40,14 @@ function findNearbyMasjid() {
             window.location.href = mapsUrl;
         }
     });
+}
+
+// Function to update the Find Masjid button text
+function updateFindMasjidButton(text) {
+    const findMasjidButton = document.getElementById("findMasjidButton");
+    if (findMasjidButton) {
+        findMasjidButton.innerHTML = `<i class="fas fa-mosque"></i> ${text}`;
+    }
 }
 
 // Dark Mode Toggle

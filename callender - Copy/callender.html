@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Hijri & Gregorian Calendar</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="calendar-container">
+    <div class="header">
+      <h1 class="app-title">Dynamic Hijri & Gregorian Calendar</h1>
+      <div class="date-display">
+        <p id="gregorian-today"></p>
+        <p id="hijri-today"></p>
+      </div>
+      <div class="toggle-buttons">
+        <button id="hijri-toggle" class="toggle active">Hijri Calendar</button>
+        <button id="gregorian-toggle" class="toggle">Gregorian Calendar</button>
+      </div>
+    </div>
+
+    <div class="calendar-navigation">
+      <button id="prev-month" class="nav-button"><i class="fas fa-chevron-left"></i></button>
+      <h2 id="current-month"></h2>
+      <button id="next-month" class="nav-button"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <div class="calendar-days" id="calendar-days">
+      <!-- Calendar dates will be dynamically rendered -->
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment-hijri/moment-hijri.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

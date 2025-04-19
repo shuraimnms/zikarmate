@@ -226,7 +226,7 @@ meta[name="viewport"] {
 header {
   background-color: #007a99;
   box-shadow: 0 4px 6px rgba(59, 206, 162, 0.1);
-  padding: 10px 20px;  /* Customize the padding for header */
+  padding: 15px 30px;  /* Customize the padding for header */
   position: fixed;  /* Makes the header stick */
   top: 0;  /* Stick to the top of the page */
   left: 0;
@@ -235,11 +235,20 @@ header {
 }
 
 header .logo {
-  font-size: 24px;
-  color: #fffcfc;
-  text-align: center;
+  font-size: 26px;
   font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  padding: 8px 16px;
+  border-radius: 25px; /* Rounded shape */
+  background: linear-gradient(135deg, #00c6ff, #007a99);
+  display: inline-block;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  font-family: 'Trebuchet MS', sans-serif;
+  letter-spacing: 1px;
 }
+
 
 header .navigation {
   text-align: center;

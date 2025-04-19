@@ -12,30 +12,25 @@
 <main>
   <h2 id="surah-title">📖 Loading...</h2>
 
-  <!-- Search -->
   <div class="search-bar">
     <input type="text" id="searchInput" placeholder="Search Ayah...">
     <button onclick="handleSearch()">🔍</button>
     <button onclick="startVoiceSearch()">🎙️</button>
   </div>
 
-  <!-- Go to Ayah -->
   <div style="text-align:center; margin-top:10px;">
     <input type="number" id="goToAyahInput" placeholder="Go to Ayah..." style="width:100px;">
     <button onclick="goToAyah()">➡️</button>
   </div>
 
-  <!-- Ayahs -->
   <div id="quran-container"></div>
 
-  <!-- Footer -->
   <div class="footer-controls">
     <button onclick="toggleScroll()" id="scrollBtn">Auto Scroll: OFF</button>
     <button onclick="changeSpeed(-1)">➖</button>
     <span id="speedValue">3</span>
     <button onclick="changeSpeed(1)">➕</button>
     <button id="darkModeBtn" onclick="toggleDarkMode()">🌙</button>
-    
   </div>
 </main>
 
@@ -54,7 +49,6 @@
   const speedValue = document.getElementById("speedValue");
   const scrollBtn = document.getElementById("scrollBtn");
 
-  // Load preferred mode
   if (localStorage.getItem("theme") === "dark") {
     document.body.classList.add("dark");
     darkModeBtn.textContent = "🌞";
@@ -92,34 +86,36 @@
     return JSON.parse(localStorage.getItem("favorites")) || [];
   }
 
-  function toggleFavorite(ayahId) {
+  function toggleFavorite(favId) {
     let favs = getFavorites();
-    const isFav = favs.includes(ayahId);
+    const isFav = favs.includes(favId);
 
     if (isFav) {
-      favs = favs.filter(f => f !== ayahId);
+      favs = favs.filter(f => f !== favId);
     } else {
-      favs.push(ayahId);
+      favs.push(favId);
     }
 
     localStorage.setItem("favorites", JSON.stringify(favs));
-
-    // Update button only
-    const btn = document.querySelector(`button[data-favid="${ayahId}"]`);
+    const btn = document.querySelector(`button[data-favid="${favId}"]`);
     if (btn) btn.innerText = isFav ? "🤍 Save" : "⭐ Saved";
   }
 
-  function isFavorite(ayahId) {
-    return getFavorites().includes(ayahId);
+  function isFavorite(favId) {
+    return getFavorites().includes(favId);
+  }
+
+  function escapeQuotes(str) {
+    return str.replace(/`/g, "\\`").replace(/"/g, '\\"');
   }
 
   function copyAyah(arabic, english) {
-    const text = `${arabic || 'Arabic not found'}\n\n${english || 'Translation not found'}`;
+    const text = `${arabic}\n\n${english}`;
     navigator.clipboard.writeText(text).then(() => alert("📋 Ayah copied!"));
   }
 
   function shareAyah(arabic, english) {
-    const shareText = `📖 Quran Ayah:\n\n${arabic || ''}\n\n💬 ${english || ''}`;
+    const shareText = `📖 Quran Ayah:\n\n${arabic}\n\n💬 ${english}`;
     if (navigator.share) {
       navigator.share({ title: 'Quran Ayah', text: shareText }).catch(() => {});
     } else {
@@ -145,14 +141,17 @@
         setTimeout(() => div.scrollIntoView({ behavior: "smooth", block: "start" }), 500);
       }
 
+      const arabicText = escapeQuotes(ayah.text?.arab || '📖 Arabic not found');
+      const englishText = escapeQuotes(ayah.translation?.en || '💬 Translation not found');
+
       div.innerHTML = `
         <div class="ayah-num">Ayah ${ayahNum}</div>
         <div class="arabic">${ayah.text?.arab || '📖 Arabic not found'}</div>
         <div class="english">${ayah.translation?.en || '💬 Translation not found'}</div>
         <audio controls preload="none" src="${ayah.audio?.primary || ''}"></audio>
         <div class="share-buttons">
-          <button onclick="copyAyah(\`${ayah.text?.arab || ''}\`, \`${ayah.translation?.en || ''}\`)">📋</button>
-          <button onclick="shareAyah(\`${ayah.text?.arab || ''}\`, \`${ayah.translation?.en || ''}\`)">🔗</button>
+          <button onclick="copyAyah(\`${arabicText}\`, \`${englishText}\`)">📋</button>
+          <button onclick="shareAyah(\`${arabicText}\`, \`${englishText}\`)">🔗</button>
           <button onclick="toggleFavorite('${favId}')" data-favid="${favId}">${isFavorite(favId) ? "⭐ Saved" : "🤍 Save"}</button>
         </div>
       `;
@@ -218,6 +217,13 @@
     }
   }
 
+  function goToAyah() {
+    const ayahNumber = parseInt(document.getElementById("goToAyahInput").value);
+    if (!ayahNumber) return;
+    const target = document.getElementById(`ayah-${ayahNumber}`);
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   function startVoiceSearch() {
     try {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -228,33 +234,22 @@
       recognition.start();
 
       recognition.onresult = function (event) {
-        document.getElementById("searchInput").value = event.results[0][0].transcript;
+        const transcript = event.results[0][0].transcript;
+        document.getElementById("searchInput").value = transcript;
         handleSearch();
       };
-
-      recognition.onerror = function () {
-        alert("🎙️ Voice recognition failed. Please try again.");
-      };
-    } catch {
-      alert("🎙️ Voice search not supported in this browser.");
+    } catch (e) {
+      alert("🎙️ Voice search failed to initialize.");
     }
   }
 
-  function goToAyah() {
-    const ayahNum = parseInt(document.getElementById("goToAyahInput").value);
-    const element = document.getElementById(`ayah-${ayahNum}`);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "center" });
-      element.classList.add("highlight");
-      setTimeout(() => element.classList.remove("highlight"), 3000);
-    } else {
-      alert("❌ Ayah not found");
-    }
+  if (surah) {
+    loadSurah(surah);
+  } else if (juz) {
+    loadJuz(juz);
+  } else {
+    title.innerText = "❗ No Surah or Juz selected.";
   }
-
-  if (surah) loadSurah(surah);
-  else if (juz) loadJuz(juz);
-  else container.innerHTML = "<p style='text-align:center;'>❌ Surah or Juz not found</p>";
 </script>
 
 </body>

@@ -1,0 +1,214 @@
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to bottom, #1a2a6c, #b21f1f, #fdbb2d);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* Calendar Container */
+.calendar-container {
+  width: 90%;
+  max-width: 450px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Header */
+.header {
+  margin-bottom: 20px;
+}
+
+.app-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.date-display p {
+  margin: 5px 0;
+  font-size: 16px;
+  animation: slideIn 0.8s ease-in-out;
+}
+
+.toggle-buttons {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.toggle {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: none;
+  padding: 8px 15px;
+  margin: 0 5px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.toggle.active {
+  background: #fdbb2d;
+  color: #000;
+}
+
+.toggle:hover {
+  transform: scale(1.1);
+  background: #ffd700;
+}
+
+/* Calendar Navigation */
+.calendar-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.nav-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  padding: 10px;
+  color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+  background: #ffd700;
+  color: #000;
+}
+
+#current-month {
+  font-size: 20px;
+}
+
+/* Calendar Days */
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.calendar-days div {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.calendar-days div:hover {
+  transform: scale(1.1);
+  background: #fdbb2d;
+  color: #000;
+}
+
+.today {
+  background: #fdbb2d;
+  color: #000;
+  font-weight: bold;
+  border: 2px solid #fff;
+  animation: pulse 1s infinite;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px #ffd700;
+  }
+  50% {
+    box-shadow: 0 0 20px #ffdf33;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .calendar-container {
+    padding: 15px;
+  }
+
+  .calendar-days div {
+    padding: 10px;
+    font-size: 12px;
+  }
+
+  #current-month {
+    font-size: 18px;
+  }
+}
+/* Main Styling for Namaz Timings */
+.namaz-background-container {
+  background: url('assets/images/masjid-bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.namaz-content-container {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  width: 80%;
+  max-width: 400px;
+  color: #fff;
+}
+
+.namaz-title {
+  font-size: 30px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.namaz-subtitle {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+#namaz-timing-list {
+  list-style: none;
+  padding: 0;
+}
+
+#namaz-timing-list li {
+  font-size: 18px;
+  padding: 5px 0;
+}
+

@@ -2,8 +2,8 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #081c15, #062c28, #0a3d37);
-  color: #fff;
+  background: linear-gradient(135deg, #f7f5e6, #e6f7f3, #f2f2f2);
+  color: #333;  /* Darker text color */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,11 +18,25 @@ body {
 /* Header */
 h1 {
   margin-top: 80px;
-  font-size: 3rem;
+  font-size: 4rem;
   text-align: center;
-  color: #f5e6ca;
-  text-shadow: 0px 4px 20px rgba(255, 255, 255, 0.5);
+  color: #000;  /* Darker color for better contrast */
+  font-weight: 700; /* Bold title */
+  text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);  /* Slight shadow for readability */
   animation: slideDown 1s ease-in-out;
+  letter-spacing: 2px;
+  font-family: 'Georgia', serif;
+}
+
+/* Urdu Text Styling */
+.urdu-text {
+  font-family: 'Noto Nastaliq Urdu', cursive;
+  font-weight: 700; /* Bold Urdu text */
+  font-size: 1.5rem; /* Larger font size for Urdu text */
+  color: #000;  /* Dark color for better visibility */
+  text-align: center;
+  margin: 15px 0;
+  line-height: 1.5;
 }
 
 /* Search Bar */
@@ -38,13 +52,13 @@ h1 {
 .search-bar {
   width: 80%;
   max-width: 600px;
-  padding: 15px 20px;
+  padding: 15px 25px;
   border: none;
   border-radius: 30px;
   font-size: 18px;
   background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.6), 0 0 8px rgba(0, 0, 0, 0.2);
-  color: #333;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 8px rgba(0, 0, 0, 0.2);
+  color: #333;  /* Dark text color for better visibility */
   transition: all 0.3s ease-in-out;
 }
 
@@ -54,7 +68,7 @@ h1 {
   transform: scale(1.05);
 }
 
-/* Book Container */
+/* Book Container - Flexbox Layout */
 .book-container {
   display: flex;
   flex-wrap: wrap;
@@ -64,23 +78,31 @@ h1 {
   padding: 20px;
   width: 100%;
   max-width: 1300px;
+  animation: fadeInUp 1s ease-in-out;
 }
 
 /* Book Cards */
 .book {
-  background: linear-gradient(135deg, #4A90E2, #2B547E);
-  border-radius: 20px;
+  background: linear-gradient(135deg, #e0c8b3, #d1b090);
+  border-radius: 15px;
   padding: 20px;
-  width: 200px;
+  width: 45%; /* Two books per row */
+  max-width: 500px;
   text-align: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease-in-out;
   text-decoration: none;
-  color: #fff;
+  color: #333;  /* Dark text for visibility */
   position: relative;
   overflow: hidden;
+  font-weight: 500;
+  font-family: 'Georgia', serif;
+  background-image: url('https://www.transparenttextures.com/patterns/old-map.png');
+  background-size: cover;
+  background-position: center;
 }
 
+/* Book Hover Effect */
 .book::before {
   content: "";
   position: absolute;
@@ -98,32 +120,48 @@ h1 {
 }
 
 .book:hover {
-  transform: translateY(-12px) scale(1.05);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 6px 12px rgba(255, 255, 255, 0.3);
+  transform: translateY(-15px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 6px 12px rgba(255, 255, 255, 0.2);
 }
 
 .book i {
   font-size: 55px;
-  color: #f5e6ca;
-  text-shadow: 0 4px 12px rgba(255, 255, 255, 0.5);
+  color: #8b5e3c;
+  text-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
   animation: pulse 2s infinite;
 }
 
+/* Book Title */
 .book-title {
   margin-top: 12px;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: bold;
-  color: #f5e6ca;
+  color: #000;  /* Darker color for title text */
+  text-transform: capitalize;
+  font-family: 'Georgia', serif;
 }
+
+.book-title-urdu {
+  font-family: 'Noto Nastaliq Urdu', cursive;
+  font-weight: 700; /* Bold Urdu text */
+  font-size: 1.4rem; /* Larger font size for better visibility */
+  color: #000;  /* Dark color for better visibility */
+  text-align: center;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
 
 /* Footer */
 footer {
   margin-top: auto;
-  padding: 20px;
+  padding: 25px;
   text-align: center;
-  font-size: 1rem;
-  color: #ccc;
+  font-size: 1.2rem;
+  color: #333;  /* Dark footer text for visibility */
   animation: fadeInUp 1s ease-in-out;
+  font-weight: 300;
+  font-family: 'Georgia', serif;
 }
 
 /* Animations */
@@ -139,7 +177,7 @@ footer {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -161,10 +199,46 @@ footer {
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);
-    text-shadow: 0 4px 12px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
   }
   50% {
-    transform: scale(1.1);
-    text-shadow: 0 6px 15px rgba(255, 255, 255, 0.6);
+    transform: scale(1.05);
+    text-shadow: 0 6px 15px rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* Media Queries for Responsiveness */
+@media screen and (max-width: 768px) {
+  .search-bar {
+    width: 90%;
+    padding: 12px 18px;
+    font-size: 16px;
+  }
+
+  .book {
+    width: 45%; /* Two books per row */
+    padding: 18px;
+  }
+
+  h1 {
+    font-size: 2.8rem;
+  }
+
+  footer {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .book {
+    width: 45%; /* Ensure two books per row even on mobile */
+  }
+
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  footer {
+    font-size: 0.9rem;
   }
 }
