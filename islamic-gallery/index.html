@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeenPlus Islamic Gallery</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>DeenPlus Islamic Gallery</h1>
+        </div>
+    </header>
+
+    <div class="gallery-container">
+        <div class="card">
+            <img src="https://i.ibb.co/spfck2mT/d213f322-5325-4113-9935-f2b17607753c.png" alt="" class="gallery-image" />
+        </div>
+        <div class="card">
+            <img src="https://i.ibb.co/HDV45r47/ic-launcher.png" alt="" class="gallery-image" />
+        </div>
+        <div class="card">
+            <img src="https://i.ibb.co/MynLWg6w/b6b04dbc-5876-4ad8-a17c-9245eb0300ca.png" alt="" class="gallery-image" />
+        </div>
+        <div class="card">
+            <img src="https://i.ibb.co/pjFR2wYJ/f50514af-1bfb-48ae-8143-f1e98a9ddeeb.png" alt="" class="gallery-image" />
+        </div>
+        <div class="card">
+            <img src="https://i.ibb.co/PZ2xjSZ1/59478f6c-2535-40ee-87c8-d0355570f59e.png" alt="" class="gallery-image" />
+        </div>
+        <div class="card">
+            <img src="https://i.ibb.co/Wvxw1tKv/f992f4ab-e766-4b4a-8e22-b440be85d31a.png" alt="" class="gallery-image" />
+        </div>
+        <div class="card">
+            <img src="https://i.ibb.co/VWkVZ1T0/4be0b610-efad-4e37-a4d0-4d5a8a4faaef.png" alt="" class="gallery-image" />
+        </div>
+        <div class="card">
+            <img src="https://i.ibb.co/BDT04Kr/d0dc465c-6c9a-49c5-950b-96e9d4a76a5a.png" alt="" class="gallery-image" />
+        </div>
+    </div>
+
+    <!-- Modal for Image Preview -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img id="modalImage" class="modal-content">
+        <div id="caption"></div>
+        <button id="shareButton" onclick="shareImage()">Share this Image</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
